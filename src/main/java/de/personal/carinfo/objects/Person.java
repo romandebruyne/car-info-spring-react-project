@@ -2,8 +2,15 @@ package de.personal.carinfo.objects;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Person {
@@ -23,13 +30,18 @@ public class Person {
     private LocalDate dateOfEntry;
     private String company;
     private String password;
-    private String role;
     
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "model_id", referencedColumnName = "id")
+    @JsonBackReference
     private Car car;
     
     public Person(long id, String salutation, String firstName, String secondName, LocalDate birthDate,
             String address, String houseNumber, String areaCode, String area, String email, boolean deactivated,
-            LocalDate dateOfEntry, String company, String password, String role, Car car) {
+            LocalDate dateOfEntry, String company, String password, Role role, Car car) {
         this.id = id;
         this.salutation = salutation;
         this.firstName = firstName;
@@ -107,7 +119,7 @@ public class Person {
         return this.password;
     }
     
-    public String getRole() {
+    public Role getRole() {
         return this.role;
     }
 

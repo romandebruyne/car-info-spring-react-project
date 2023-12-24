@@ -1,14 +1,15 @@
 package de.personal.carinfo.objects;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Car {
@@ -42,6 +43,7 @@ public class Car {
 	private String modelType;
 	private String baseCar;
 	
+	@OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Person> persons;
 	
 	public Car(int id, String model, String brand, String indicator, String modelFamily, LocalDate launchDate,

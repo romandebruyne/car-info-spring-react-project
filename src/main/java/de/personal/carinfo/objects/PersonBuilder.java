@@ -17,7 +17,7 @@ public class PersonBuilder {
     private LocalDate dateOfEntry;
     private String company;
     private String password;
-    private String role;
+    private Role role;
     private Car car;
     
     public PersonBuilder() {
@@ -82,12 +82,17 @@ public class PersonBuilder {
     	return this;
     }
     
+    public PersonBuilder withCompany(String company) {
+    	this.company = company;
+    	return this;
+    }
+    
     public PersonBuilder withPassword(String password) {
     	this.password = password;
     	return this;
     }
     
-    public PersonBuilder withRole(String role) {
+    public PersonBuilder withRole(Role role) {
     	this.role = role;
     	return this;
     }

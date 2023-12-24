@@ -29,7 +29,7 @@ public class PersonService {
 	private CarRepository carRepo;
 	
 	public void readPersonDataFromCSV(boolean header) {
-		String path = "src/main/resources/Personendaten.csv", line;
+		String path = "src/main/resources/fakepersondata.csv", line;
 		String[] information = new String[16], tempArray = new String[2];
 		PersonBuilder personBuilder = new PersonBuilder();
 		long randomId;
@@ -80,8 +80,8 @@ public class PersonService {
 				personBuilder.withDateOfEntry(formatDate(information[12]));
 				personBuilder.withCompany(information[13]);
 				
-				personBuilder.withCar(this.carRepo.findById(Long.parseLong(information[14])).get());
-				personBuilder.withPassword(information[15]);
+				personBuilder.withCar(this.carRepo.findById(Long.parseLong(information[14])).orElse(null));
+				personBuilder.withPassword(this.bcryptEncoder.encode(information[15]));
 				personBuilder.withRole(Role.USER);
 
 				this.personRepo.save(personBuilder.build());
@@ -92,7 +92,6 @@ public class PersonService {
 		} catch (IOException e) {
 			this.logger.info("Error occurred during person data import!");
 		}
-
 	}
 	
 	private void createAdmin() {
@@ -100,7 +99,7 @@ public class PersonService {
 			Person admin = new Person(9999999L, standardizeSalutation(""), "Adam", "Admin",
 					LocalDate.parse("1980-12-31"), "Adminstr.", "1a", "38120", "Braunschweig",
 					"adminno1@fakemail.com", false, LocalDate.parse("2000-01-01"),
-					"NA", this.bcryptEncoder.encode("1234"), Role.ADMIN, this.carRepo.findById(6306L).get());
+					"NA", this.bcryptEncoder.encode("1234"), Role.ADMIN, this.carRepo.findById(6306L).orElse(null));
 			this.personRepo.save(admin);
 			
 			this.logger.info("Admin successfully created!");

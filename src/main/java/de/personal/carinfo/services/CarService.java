@@ -23,7 +23,7 @@ public class CarService {
 	private CarRepository carRepo;
 
 	public void readCarDataFromCSV(boolean header) {
-		String path = "src/main/resources/Fahrzeugmodelle.csv", line;
+		String path = "src/main/resources/fakecardata.csv", line;
 		String[] information = new String[19];
 		CarBuilder carBuilder = new CarBuilder();
 

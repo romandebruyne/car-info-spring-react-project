@@ -32,6 +32,7 @@ public class PersonService {
 		String path = "src/main/resources/Personendaten.csv", line;
 		String[] information = new String[16], tempArray = new String[2];
 		PersonBuilder personBuilder = new PersonBuilder();
+		long randomId;
 
 		try (BufferedReader br = new BufferedReader(new FileReader(path))) {
 			if (header) {
@@ -43,7 +44,12 @@ public class PersonService {
 			while ((line = br.readLine()) != null) {
 				information = line.split(";");
 				
-				personBuilder.withId(Long.parseLong(information[1]));
+				randomId = Long.parseLong(information[1]);
+				while (this.personRepo.findById(randomId).orElse(null) != null) {
+					randomId = generateRandomId(7);
+				}
+				
+				personBuilder.withId(randomId);
 				personBuilder.withSalutation(standardizeSalutation(information[2]));
 				personBuilder.withFirstName(information[3]);
 				personBuilder.withSecondName(information[4]);

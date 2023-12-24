@@ -5,6 +5,7 @@ import { Credentials } from './Credentials';
 import { StartPage } from './StartPage';
 import { LoginPage } from './LoginPage';
 import { UserPage } from './UserPage';
+import { AdminPage } from './AdminPage';
 
 function App() {
   const [startPageIsOpen, setStartPageIsOpen] = useState(true);
@@ -76,6 +77,11 @@ function App() {
     setLoginPageIsOpen(true);
   }
 
+  function backFromAdminPage() {
+    setAdminPageIsOpen(false);
+    setLoginPageIsOpen(true);
+  }
+
   return(
     <>
       { /* Start Page */}
@@ -88,7 +94,7 @@ function App() {
 
       { /* User or Admin Page */}
       { userPageIsOpen && credentials !== null ? <UserPage creds={ credentials } onBack={ backFromUserPage } /> : null }
-      { adminPageIsOpen && credentials !== null ? null : null }
+      { adminPageIsOpen && credentials !== null ? <AdminPage creds={credentials} onBack={ backFromAdminPage } /> : null }
     </>
   )
 }

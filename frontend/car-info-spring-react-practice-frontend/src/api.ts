@@ -163,7 +163,13 @@ export async function getCarInfoByFullTextSearch(creds: Credentials, text: strin
     return response;
 }
 
-export async function getUserByEmail(creds: Credentials, email: string) {
+export async function getAllPersons(creds: Credentials) {
+    const responsePers = await axios.get<Person[]>(PERSONS_URL,
+        { headers: { 'Authorization': 'Basic ' + encodePassword(creds) } });
+    return responsePers;
+}
+
+export async function getPersonByEmail(creds: Credentials, email: string) {
     const response = await axios.get<Person>(PERSONS_URL + "/email/" + email,
         { headers: { 'Authorization': 'Basic ' + encodePassword(creds) } });
     return response;
@@ -197,6 +203,43 @@ export async function editUserData(creds: Credentials, id: string, firstName: st
     }
 
     const response = await axios.put(FINAL_URL,
+        { headers: { 'Authorization': 'Basic ' + encodePassword(creds) } });
+    return response;
+}
+
+export async function createUser(creds: Credentials, firstName: string, secondName: string, birthDate: string,
+    address: string, houseNumber: string, areaCode: string, area: string, email: string, password: string,
+    salutation: string, company: string) {
+
+    let FINAL_URL = PERSONS_URL + "?firstName=" + firstName + "&" +
+        "secondName=" + secondName + "&" +
+        "birthDate=" + birthDate + "&" +
+        "address=" + address + "&" +
+        "houseNumber=" + houseNumber + "&" +
+        "areaCode=" + areaCode + "&" +
+        "area=" + area + "&" +
+        "email=" + email + "&" +
+        "password=" + password + "&";
+
+    if (salutation !== "") {
+        FINAL_URL = FINAL_URL + "salutation=" + salutation + "&";
+    } else {
+        FINAL_URL = FINAL_URL + "salutation=k.A.&"
+    }
+
+    if (company !== "") {
+        FINAL_URL = FINAL_URL + "company=" + company;
+    } else {
+        FINAL_URL = FINAL_URL + "company";
+    }
+
+    const response = await axios.post(FINAL_URL,
+        { headers: { 'Authorization': 'Basic ' + encodePassword(creds) } });
+    return response;
+}
+
+export async function deleteUser(creds: Credentials, email: string) {
+    const response = await axios.delete(PERSONS_URL + "/" + email,
         { headers: { 'Authorization': 'Basic ' + encodePassword(creds) } });
     return response;
 }

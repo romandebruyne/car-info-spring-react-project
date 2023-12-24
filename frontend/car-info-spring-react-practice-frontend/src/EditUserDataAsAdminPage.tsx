@@ -1,15 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { editUserData, getPersonByEmail } from "./api";
 import { Credentials } from "./Credentials";
-import { Person, editUserData, getPersonByEmail } from "./api";
 
-export type Props = {
-    creds: Credentials; onEdit: (openUserPage: boolean, newEmail: string, newPassword: string) => void;
-    onBack: () => void
-};
+export type Props = { creds: Credentials; onEdit: (openAdminPage: boolean) => void; onBack: () => void };
 
-export function EditUserDataAsUserPage(props: Props) {
-    const [editUserDataAsUserPageIsOpen, setEditUserDataAsUserPageIsOpen] = useState(true);
-    const [currentUser, setCurrentUser] = useState<null | Person>(null);
+export function EditUserDataAsAdminPage(props: Props) {
+    const [searchPartIsOpen, setSearchPartIsOpen] = useState(true);
+    const [enteringDataPartIsOpen, setEnteringDataPartIsOpen] = useState(false);
+
     const [id, setId] = useState("");
     const [firstName, setFirstName] = useState("");
     const [secondName, setSecondName] = useState("");
@@ -22,57 +20,85 @@ export function EditUserDataAsUserPage(props: Props) {
     const [password, setPassword] = useState("");
     const [salutation, setSalution] = useState("");
     const [company, setCompany] = useState("");
-    const [errorOccurred, setErrorOccurred] = useState(false)
+    const [emailEnteredByAdmin, setEmailEnteredByAdmin] = useState("");
+    const [errorOccurred, setErrorOccurred] = useState(false);
 
-    useEffect(() => {
-        getPersonByEmail(props.creds, props.creds.email).then(body => setCurrentUser(body.data));
-    }, []);
-
-    function handleGetCurrentValues() {
-        if (currentUser !== null) {
-            setId(currentUser.id.toString());
-            setFirstName(currentUser.firstName);
-            setSecondName(currentUser.secondName);
-            setBirthDate(currentUser.birthDate);
-            setAddress(currentUser.address);
-            setHouseNumber(currentUser.houseNumber);
-            setAreaCode(currentUser.areaCode);
-            setArea(currentUser.area);
-            setEmail(props.creds.email);
-            setPassword(props.creds.password);
-        }
+    function handleClickOnSearchUser() {
+        getPersonByEmail(props.creds, emailEnteredByAdmin).then(body => {
+            if (body.data) {
+                setId(body.data.id.toString());
+                setFirstName(body.data.firstName);
+                setSecondName(body.data.secondName);
+                setBirthDate(body.data.birthDate);
+                setAddress(body.data.address);
+                setHouseNumber(body.data.houseNumber);
+                setAreaCode(body.data.areaCode);
+                setArea(body.data.area);
+                setEmail(body.data.email);
+                setPassword(body.data.password);
+                setSearchPartIsOpen(false);
+                setEnteringDataPartIsOpen(true);
+            } else {
+                handleErrorOccurred();
+            }
+        });
     }
 
-    function handleDataEdit(props: Props) {
+    function handleUserDataEdit() {
         editUserData(props.creds, id, firstName, secondName, birthDate, address, houseNumber, areaCode, area,
             email, password, salutation, company).catch(handleErrorOccurred);
-        props.onEdit(true, email, password);
-    }
-
-    function handleErrorOccurred() {
-        setEditUserDataAsUserPageIsOpen(false);
-        setErrorOccurred(true);
+        props.onEdit(true);
     }
 
     function handleErrorOccurredWarning() {
         return (
             <div>
-                <p>Error occurred, try again please!</p>
+                <p>Error occurred, please try again!</p>
                 <button onClick={backFromError}>Back</button>
             </div>
         )
     }
 
+    function handleErrorOccurred() {
+        setEmailEnteredByAdmin("");
+        setSearchPartIsOpen(false);
+        setEnteringDataPartIsOpen(false);
+        setErrorOccurred(true);
+    }
+
     function backFromError() {
         setErrorOccurred(false);
-        setEditUserDataAsUserPageIsOpen(true);
+        setSearchPartIsOpen(true);
+    }
+
+    function backFromEnteringData() {
+        setEmailEnteredByAdmin("");
+        setEnteringDataPartIsOpen(false);
+        setSearchPartIsOpen(true);
     }
 
     return (
         <>
-            {editUserDataAsUserPageIsOpen ?
+            {searchPartIsOpen ?
                 <>
                     <h2>Edit user data</h2>
+                    <p>Please choose user by entering his/her mail:</p>
+                    <label>Mail:&emsp; </label>
+                    <input type="text" placeholder="Mail" value={ emailEnteredByAdmin }
+                        onChange={(event) => setEmailEnteredByAdmin(event.target.value)} />
+                    <button
+                        disabled={emailEnteredByAdmin === ""}
+                        onClick={handleClickOnSearchUser}
+                    >
+                        Search user
+                    </button>
+
+                    <button onClick={props.onBack}>Zurück</button>
+
+                </> : null}
+
+            {enteringDataPartIsOpen ?
+                <>
                     <p>Mandatory</p>
                     <input type="text" placeholder="First name" value={firstName}
                         onChange={event => setFirstName(event.target.value)} /><br />
@@ -99,13 +125,15 @@ export function EditUserDataAsUserPage(props: Props) {
                     <input type="text" placeholder="Company" value={company}
                         onChange={event => setCompany(event.target.value)} /><br /><br />
 
-                    <button onClick={handleGetCurrentValues}>Show current data</button>
                     <button
                         disabled={firstName === "" || secondName === "" || birthDate === "" || address === "" ||
                             houseNumber === "" || areaCode === "" || area === "" || email === "" || password === ""}
-                        onClick={() => handleDataEdit(props)}>Submit</button>
-                    <button onClick={props.onBack}>Back</button>
-                </> : null}
+                        onClick={handleUserDataEdit}
+                    >Submit
+                    </button>
+                    <button onClick={backFromEnteringData}>Back</button>
+                </>
+                : null}
 
             {errorOccurred ? handleErrorOccurredWarning() : null}
         </>

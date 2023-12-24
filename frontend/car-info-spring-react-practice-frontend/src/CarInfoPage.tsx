@@ -33,25 +33,25 @@ export function CarInfoPage(props: Props) {
 
     const tableColumns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 50 },
-        { field: 'model', headerName: 'Modell', width: 50 },
-        { field: 'brand', headerName: 'Marke', width: 50 },
-        { field: 'indicator', headerName: 'Markenindikator', width: 50 },
-        { field: 'modelFamily', headerName: 'Modellfamilie', width: 50 },
-        { field: 'launchDate', headerName: 'Markteinführung', width: 50 },
-        { field: 'modelYear', headerName: 'Modelljahr', width: 50 },
-        { field: 'developmentType', headerName: 'Entwicklungstyp', width: 50 },
-        { field: 'modelStatus', headerName: 'Modellstatus', width: 50 },
+        { field: 'model', headerName: 'Model', width: 50 },
+        { field: 'brand', headerName: 'Brand', width: 50 },
+        { field: 'indicator', headerName: 'Indicator', width: 50 },
+        { field: 'modelFamily', headerName: 'Model Family', width: 50 },
+        { field: 'launchDate', headerName: 'Launch Date', width: 50 },
+        { field: 'modelYear', headerName: 'Model Year', width: 50 },
+        { field: 'developmentType', headerName: 'Dev. Type', width: 50 },
+        { field: 'modelStatus', headerName: 'Model Status', width: 50 },
         { field: 'segment', headerName: 'Segment', width: 50 },
-        { field: 'carBodyType', headerName: 'Karosserieart', width: 50 },
-        { field: 'carBodySpecification', headerName: 'Karosseriespez.', width: 50 },
-        { field: 'engineType', headerName: 'Antrieb', width: 50 },
-        { field: 'carProject', headerName: 'Projekt', width: 50 },
-        { field: 'limitation', headerName: 'Limit', width: 50 },
+        { field: 'carBodyType', headerName: 'Car Body Type', width: 50 },
+        { field: 'carBodySpecification', headerName: 'Car Body Spec.', width: 50 },
+        { field: 'engineType', headerName: 'Engine Type', width: 50 },
+        { field: 'carProject', headerName: 'Project', width: 50 },
+        { field: 'limitation', headerName: 'Limitation', width: 50 },
         { field: 'uuid', headerName: 'UUID', width: 50 },
-        { field: 'sisterModelOne', headerName: 'Schwestermodell 1', width: 50 },
-        { field: 'sisterModelTwo', headerName: 'Schwestermodell 2', width: 50 },
-        { field: 'modelType', headerName: 'Modelltyp', width: 50 },
-        { field: 'baseCar', headerName: 'Basisvehikel', width: 50 }
+        { field: 'sisterModelOne', headerName: 'Sister Model 1', width: 50 },
+        { field: 'sisterModelTwo', headerName: 'Sister Model 2', width: 50 },
+        { field: 'modelType', headerName: 'Model Type', width: 50 },
+        { field: 'baseCar', headerName: 'Base Car', width: 50 }
     ];
 
     function handleFilter() {

@@ -1,11 +1,15 @@
 package de.personal.carinfo.controllers;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +25,16 @@ public class PersonController {
 
     @Autowired
     private PersonService personService;
+    
+    @GetMapping("/persons")
+    public List<Person> getAllPersons() {
+        return this.personRepo.findAll();
+    }
+    
+    @GetMapping("/persons/email/{email}")
+    public Person getPersonByEMail(@PathVariable String email) {
+        return this.personRepo.findByEmail(email).orElse(null);
+    }
 	
 	@PutMapping("/persons")
     public ResponseEntity<Person> editPerson(
@@ -51,5 +65,15 @@ public class PersonController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+	
+    @DeleteMapping("/persons/{email}")
+    public ResponseEntity<HttpStatus> deleteByEmail(@PathVariable String email) {
+        Person person = this.personRepo.findByEmail(email).orElse(null);
+        if (person != null) {
+            this.personRepo.delete(person);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

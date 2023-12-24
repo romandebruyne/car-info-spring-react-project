@@ -66,7 +66,7 @@ export function DeleteUserPage(props: Props) {
                         onClick={handleClickOnDeletion}
                     > Submit
                     </button>
-                    <button onClick={props.onBack}>Zurück</button>
+                    <button onClick={props.onBack}>Back</button>
                 </> : null}
 
             {errorOccurred ? handleErrorOccurredWarning() : null}

@@ -89,11 +89,10 @@ export function EditUserDataAsAdminPage(props: Props) {
                     <button
                         disabled={emailEnteredByAdmin === ""}
                         onClick={handleClickOnSearchUser}
-                    >
-                        Search user
+                    > Search user
                     </button>
 
-                    <button onClick={props.onBack}>Zurück</button>
+                    <button onClick={props.onBack}>Back</button>
 
                 </> : null}
 

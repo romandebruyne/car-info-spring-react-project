@@ -6,12 +6,15 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.personal.carinfo.objects.Car;
 import de.personal.carinfo.objects.CarBuilder;
 import de.personal.carinfo.repos.CarRepository;
 
@@ -72,5 +75,19 @@ public class CarService {
 	public String getDateFromGermanDateFormat(String dateAsString) {
 		String[] information = dateAsString.replace("\"", "").split("\\.");
 		return information[2] + "-" + information[1] + "-" + information[0];
+	}
+	
+	public List<Car> mergeLists(List<Car> listOne, List<Car> listTwo) {
+		List<Car> resultList = new ArrayList<>();
+		if (listOne.isEmpty()) {
+			resultList.addAll(listTwo);
+		} else {
+			for (Car car : listTwo) {
+				if (listOne.contains(car)) {
+					resultList.add(car);
+				}
+			}			
+		}
+		return resultList;
 	}
 }

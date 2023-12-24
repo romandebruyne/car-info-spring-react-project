@@ -4,7 +4,7 @@ import { Credentials } from "./Credentials";
 
 export type Props = { onSubmit: (creds: Credentials, role: string) => void, onBack: () => void };
 
-export function Loginpage(props: Props) {
+export function LoginPage(props: Props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -36,7 +36,7 @@ export function Loginpage(props: Props) {
                 >
                     Login
                 </button>
-                <button onClick={props.onBack}>Zurück</button>
+                <button onClick={props.onBack}>Back</button>
             </div>
         </>
     )

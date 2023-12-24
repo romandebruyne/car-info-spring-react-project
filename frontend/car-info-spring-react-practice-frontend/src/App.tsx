@@ -2,8 +2,9 @@ import { useState } from 'react'
 
 import './App.css'
 import { Credentials } from './Credentials';
-import { Startpage } from './Startpage';
-import { Loginpage } from './Loginpage';
+import { StartPage } from './StartPage';
+import { LoginPage } from './LoginPage';
+import { UserPage } from './UserPage';
 
 function App() {
   const [startPageIsOpen, setStartPageIsOpen] = useState(true);
@@ -70,19 +71,24 @@ function App() {
     setStartPageIsOpen(true);
   }
 
+  function backFromUserPage() {
+    setUserPageIsOpen(false);
+    setLoginPageIsOpen(true);
+  }
+
   return(
     <>
       { /* Start Page */}
-      {startPageIsOpen ? <Startpage onLogin={ handleClickOnLogin } /> : null}
+      { startPageIsOpen ? <StartPage onLogin={ handleClickOnLogin } /> : null }
 
       { /* Login Page */}
-      {loginPageIsOpen ? <Loginpage onSubmit={handleLogin} onBack={backFromLogin} /> : null}
-      {wrongCredentialsWarningIsOpen ? handleUnauthorizedLogin() : null}
-      {deactivatedWarningIsOpen ? handleDeactivatedUserLogin() : null}
+      { loginPageIsOpen ? <LoginPage onSubmit={ handleLogin } onBack={ backFromLogin } /> : null }
+      { wrongCredentialsWarningIsOpen ? handleUnauthorizedLogin() : null }
+      { deactivatedWarningIsOpen ? handleDeactivatedUserLogin() : null }
 
       { /* User or Admin Page */}
-      {userPageIsOpen && credentials !== null ? null : null}
-      {adminPageIsOpen && credentials !== null ? null : null}
+      { userPageIsOpen && credentials !== null ? <UserPage creds={ credentials } onBack={ backFromUserPage } /> : null }
+      { adminPageIsOpen && credentials !== null ? null : null }
     </>
   )
 }

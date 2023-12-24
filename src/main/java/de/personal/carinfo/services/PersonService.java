@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -193,5 +195,110 @@ public class PersonService {
 					+ dateString.substring(0, 2));
 			}
 		}
+	}
+	
+	public Person editOrCreatePerson(Map<String, String> dataMap, boolean createPerson) {
+		PersonBuilder personBuilder = new PersonBuilder();
+		Person existingPerson;
+		long randomId;
+
+		if (createPerson) {
+			randomId = generateRandomId(7);
+			
+			while (this.personRepo.findById(randomId).orElse(null) != null) {
+				randomId = generateRandomId(7);
+			}
+			
+			personBuilder.withId(randomId);
+			personBuilder.withDateOfEntry(LocalDate.now());
+			personBuilder.withRole(Role.USER);
+			
+		} else {
+			existingPerson = this.personRepo.findByEmail(dataMap.get("email")).orElse(null);
+			personBuilder.withId(existingPerson.getId());
+			personBuilder.withSalutation(existingPerson.getSalutation());
+			personBuilder.withFirstName(existingPerson.getFirstName());
+			personBuilder.withSecondName(existingPerson.getSecondName());
+			personBuilder.withBirthDate(existingPerson.getBirthDate());
+			personBuilder.withAddress(existingPerson.getAddress());
+			personBuilder.withHouseNumber(existingPerson.getHouseNumber());
+			personBuilder.withAreaCode(existingPerson.getAreaCode());
+			personBuilder.withArea(existingPerson.getArea());
+			personBuilder.withEmail(existingPerson.getEmail());
+			personBuilder.withDeactivated(existingPerson.isDeactivated());
+			personBuilder.withDateOfEntry(existingPerson.getDateOfEntry());
+			personBuilder.withCompany(existingPerson.getCompany());
+			personBuilder.withCar(existingPerson.getCar());
+			personBuilder.withPassword(existingPerson.getPassword());
+			personBuilder.withRole(existingPerson.getRole());
+		}
+
+		if (dataMap.get("firstName") != null) {
+			personBuilder.withFirstName(dataMap.get("firstName"));
+		}
+
+		if (dataMap.get("secondName") != null) {
+			personBuilder.withSecondName(dataMap.get("secondName"));
+		}
+
+		if (dataMap.get("birthDate") != null) {
+			personBuilder.withBirthDate(LocalDate.parse(dataMap.get("birthDate")));
+		}
+
+		if (dataMap.get("address") != null) {
+			personBuilder.withAddress(dataMap.get("address"));
+		}
+
+		if (dataMap.get("streetNumber") != null) {
+			personBuilder.withHouseNumber(dataMap.get("houseNumber"));
+		}
+
+		if (dataMap.get("areaCode") != null) {
+			personBuilder.withAreaCode(dataMap.get("areaCode"));
+		}
+
+		if (dataMap.get("area") != null) {
+			personBuilder.withArea(dataMap.get("area"));
+		}
+
+		if (dataMap.get("email") != null) {
+			personBuilder.withEmail(dataMap.get("email"));
+		}
+
+		if (dataMap.get("password") != null) {
+			personBuilder.withPassword(dataMap.get("password"));
+		}
+
+		if (dataMap.get("salutation") != null) {
+			personBuilder.withSalutation(dataMap.get("salutation"));
+		} else {
+			personBuilder.withSalutation("k.A.");
+		}
+
+		if (dataMap.get("company") != null) {
+			personBuilder.withCompany(dataMap.get("company"));
+		}
+
+		return personBuilder.build();
+	}
+
+	public Map<String, String> createMapping(String firstName, String secondName, String birthDate,
+			String address, String houseNumber, String areaCode, String area, String email, String password,
+			String salutation, String company) {
+		Map<String, String> mapping = new HashMap<>();
+
+		mapping.put("firstName", firstName);
+		mapping.put("secondName", secondName);
+		mapping.put("birthDate", birthDate);
+		mapping.put("address", address);
+		mapping.put("houseNumber", houseNumber);
+		mapping.put("areaCode", areaCode);
+		mapping.put("area", area);
+		mapping.put("email", email);
+		mapping.put("password", password);
+		mapping.put("salutation", salutation);
+		mapping.put("company", company);
+
+		return mapping;
 	}
 }

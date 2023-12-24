@@ -2,7 +2,7 @@ import './App.css'
 
 type Props = { onLogin: () => void };
 
-export function Startpage(props: Props) {
+export function StartPage(props: Props) {
     return (
         <>
             <h1 className="press">Welcome!</h1>
@@ -12,7 +12,7 @@ export function Startpage(props: Props) {
                 </button><br /><br />
             </div>
             <p className="press">
-                Click on button to continue.
+                Click button to continue.
             </p>
         </>
     )

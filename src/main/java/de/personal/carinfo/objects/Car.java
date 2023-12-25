@@ -159,4 +159,30 @@ public class Car {
 	public List<Person> getPersons() {
 		return this.persons;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.id);
+		sb.append(this.model.toLowerCase());
+		sb.append(this.brand.toLowerCase());
+		sb.append(this.indicator.toLowerCase());
+		sb.append(this.modelFamily.toLowerCase());
+		sb.append(this.launchDate);
+		sb.append(this.modelYear);
+		sb.append(this.developmentType.toLowerCase());
+		sb.append(this.modelStatus.toLowerCase());
+		sb.append(this.segment.toLowerCase());
+		sb.append(this.carBodyType.toLowerCase());
+		sb.append(this.carBodySpecification.toLowerCase());
+		sb.append(this.engineType.toLowerCase());
+		sb.append(this.carProject.toLowerCase());
+		sb.append(this.limitation.toLowerCase());
+		sb.append(this.uuid.toLowerCase());
+		sb.append(this.sisterModelOne.toLowerCase());
+		sb.append(this.sisterModelTwo.toLowerCase());
+		sb.append(this.modelType.toLowerCase());
+		sb.append(this.baseCar.toLowerCase());
+		return sb.toString();
+	}
 }

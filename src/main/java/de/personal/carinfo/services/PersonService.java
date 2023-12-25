@@ -249,7 +249,7 @@ public class PersonService {
 			personBuilder.withAddress(dataMap.get("address"));
 		}
 
-		if (dataMap.get("streetNumber") != null) {
+		if (dataMap.get("houseNumber") != null) {
 			personBuilder.withHouseNumber(dataMap.get("houseNumber"));
 		}
 
@@ -277,6 +277,8 @@ public class PersonService {
 
 		if (dataMap.get("company") != null) {
 			personBuilder.withCompany(dataMap.get("company"));
+		} else {
+			personBuilder.withCompany("k.A.");
 		}
 
 		return personBuilder.build();

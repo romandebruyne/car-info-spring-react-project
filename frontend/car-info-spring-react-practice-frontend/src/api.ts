@@ -3,7 +3,7 @@ import { Credentials, encodePassword } from "./Credentials";
 
 const SERVER_URL = "http://localhost:8080";
 const LOGIN_URL = SERVER_URL + "/login";
-const CAR_INFO_URL = SERVER_URL + "/carinfo"
+const CARS_URL = SERVER_URL + "/cars"
 const PERSONS_URL = SERVER_URL + "/persons"
 
 export type Car = {
@@ -30,7 +30,7 @@ export async function getCarInfoByFullTextSearch(creds: Credentials, text: strin
     carProject: string, limitation: string, uuid: string, sisterModelOne: string, sisterModelTwo: string,
     modelType: string, baseCar: string) {
 
-    let FINAL_URL = CAR_INFO_URL + "/fullTextSearch";
+    let FINAL_URL = CARS_URL + "/fullTextSearch";
 
     if (text !== "") {
         FINAL_URL = FINAL_URL + "?text=" + text + "&";
@@ -230,7 +230,7 @@ export async function createUser(creds: Credentials, firstName: string, secondNa
     if (company !== "") {
         FINAL_URL = FINAL_URL + "company=" + company;
     } else {
-        FINAL_URL = FINAL_URL + "company";
+        FINAL_URL = FINAL_URL + "company=k.A.";
     }
 
     const response = await axios.post(FINAL_URL,

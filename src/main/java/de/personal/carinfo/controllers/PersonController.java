@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,8 @@ import de.personal.carinfo.services.PersonService;
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 public class PersonController {
+	private BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder(4);
+	
 	@Autowired
     private PersonRepository personRepo;
 
@@ -37,6 +40,34 @@ public class PersonController {
     public Person getPersonByEMail(@PathVariable String email) {
         return this.personRepo.findByEmail(email).orElse(null);
     }
+    
+    @PostMapping("/persons")
+    public ResponseEntity<Person> createPerson(
+            @RequestParam(value = "firstName", defaultValue = "", required = true) String firstName,
+			@RequestParam(value = "secondName", defaultValue = "", required = true) String secondName,
+			@RequestParam(value = "birthDate", defaultValue = "", required = true) String birthDate,
+			@RequestParam(value = "address", defaultValue = "", required = true) String address,
+			@RequestParam(value = "houseNumber", defaultValue = "", required = true) String houseNumber,
+			@RequestParam(value = "areaCode", defaultValue = "", required = true) String areaCode,
+			@RequestParam(value = "area", defaultValue = "", required = true) String area,
+			@RequestParam(value = "email", defaultValue = "", required = true) String email,
+			@RequestParam(value = "password", defaultValue = "", required = true) String password,
+			@RequestParam(value = "salutation", defaultValue = "", required = false) String salutation,
+			@RequestParam(value = "company", defaultValue = "", required = false) String company) {
+
+		Map<String, String> dataMap;
+		Person personToCreate;
+
+		try {
+			dataMap = this.personService.createMapping(firstName, secondName, birthDate, address, 
+					houseNumber, areaCode, area, email, this.bcryptEncoder.encode(password), salutation, 
+					company);
+			personToCreate = this.personService.editOrCreatePerson(dataMap, true);
+			return new ResponseEntity<>(this.personRepo.save(personToCreate), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 	@PutMapping("/persons")
     public ResponseEntity<Person> editPerson(
@@ -51,15 +82,14 @@ public class PersonController {
             @RequestParam(value = "email", defaultValue = "", required = true) String email,
             @RequestParam(value = "password", defaultValue = "", required = true) String password,
             @RequestParam(value = "salutation", defaultValue = "", required = false) String salutation,
-            @RequestParam(value = "company", defaultValue = "", required = true) String company) {
+            @RequestParam(value = "company", defaultValue = "", required = false) String company) {
 
-        BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder(4);
+		Map<String, String> dataMap;
         Person personToEdit;
-        Map<String, String> dataMap;
         
         try {
             dataMap = this.personService.createMapping(firstName, secondName, birthDate,
-            		address, houseNumber, areaCode, area, email, bcryptEncoder.encode(password),
+            		address, houseNumber, areaCode, area, email, this.bcryptEncoder.encode(password),
             		salutation, company);
             personToEdit = this.personService.editOrCreatePerson(dataMap, false);
             return new ResponseEntity<>(this.personRepo.save(personToEdit), HttpStatus.OK);

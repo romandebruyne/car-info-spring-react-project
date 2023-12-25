@@ -38,6 +38,8 @@ export function EditUserDataAsUserPage(props: Props) {
             setHouseNumber(currentUser.houseNumber);
             setAreaCode(currentUser.areaCode);
             setArea(currentUser.area);
+            setSalution(currentUser.salutation);
+            setCompany(currentUser.company)
             setEmail(props.creds.email);
             setPassword(props.creds.password);
         }

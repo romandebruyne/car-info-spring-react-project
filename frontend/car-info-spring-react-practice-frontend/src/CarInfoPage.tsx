@@ -96,10 +96,10 @@ export function CarInfoPage(props: Props) {
                 <input type="text" placeholder="Full text" value={fullText}
                     onChange={event => setFullText(event.target.value)} />
 
-                <button onClick={handleOpenCloseFilters}>Alle Filter anzeigen</button>
-                <button onClick={handleReset}>Alle Felder reseten</button>
-                <button onClick={handleFilter}>Ergebnisse anzeigen</button>
-                <button onClick={props.onBack}>Zurück</button><br /><br />
+                <button onClick={handleOpenCloseFilters}>Show all filters</button>
+                <button onClick={handleReset}>Reset all filters</button>
+                <button onClick={handleFilter}>Show results</button>
+                <button onClick={props.onBack}>Back</button><br /><br />
             </div>
 
             {allFiltersAreOpen ?
@@ -107,49 +107,49 @@ export function CarInfoPage(props: Props) {
                     <div className="box">
                         <input type="text" placeholder="ID" value={id}
                             onChange={event => setId(event.target.value)} />
-                        <input type="text" placeholder="Modell" value={model}
+                        <input type="text" placeholder="Model" value={model}
                             onChange={event => setModel(event.target.value)} />
-                        <input type="text" placeholder="Marke" value={brand}
+                        <input type="text" placeholder="Brand" value={brand}
                             onChange={event => setBrand(event.target.value)} />
-                        <input type="text" placeholder="Markenindikator" value={indicator}
+                        <input type="text" placeholder="Indicator" value={indicator}
                             onChange={event => setIndicator(event.target.value)} />
-                        <input type="text" placeholder="Modellfamilie" value={modelFamily}
+                        <input type="text" placeholder="Model family" value={modelFamily}
                             onChange={event => setModelFamily(event.target.value)} />
                     </div>
                     <div className="box">
-                        <input type="text" placeholder="Markteinführung" value={launchDate}
+                        <input type="text" placeholder="Launch date" value={launchDate}
                             onChange={event => setLaunchDate(event.target.value)} />
-                        <input type="text" placeholder="Modelljahr" value={modelYear}
+                        <input type="text" placeholder="Model year" value={modelYear}
                             onChange={event => setModelYear(event.target.value)} />
-                        <input type="text" placeholder="Entwicklungstyp" value={developmentType}
+                        <input type="text" placeholder="Dev. Type" value={developmentType}
                             onChange={event => setDevelopmentType(event.target.value)} />
-                        <input type="text" placeholder="Modellstatus" value={modelStatus}
+                        <input type="text" placeholder="Model status" value={modelStatus}
                             onChange={event => setModelStatus(event.target.value)} />
                         <input type="text" placeholder="Segment" value={segment}
                             onChange={event => setSegment(event.target.value)} />
                     </div>
                     <div className="box">
-                        <input type="text" placeholder="Karosserieart" value={carBodyType}
+                        <input type="text" placeholder="Car Body Type" value={carBodyType}
                             onChange={event => setCarBodyType(event.target.value)} />
-                        <input type="text" placeholder="Karosserie-Spez." value={carBodySpecification}
+                        <input type="text" placeholder="Car Body Spec." value={carBodySpecification}
                             onChange={event => setCarBodySpecification(event.target.value)} />
-                        <input type="text" placeholder="Antrieb" value={engineType}
+                        <input type="text" placeholder="Engine Type" value={engineType}
                             onChange={event => setEngineType(event.target.value)} />
-                        <input type="text" placeholder="Project" value={carProject}
+                        <input type="text" placeholder="Car Project" value={carProject}
                             onChange={event => setCarProject(event.target.value)} />
-                        <input type="text" placeholder="Limit" value={limitation}
+                        <input type="text" placeholder="Limitation" value={limitation}
                             onChange={event => setLimitation(event.target.value)} />
                     </div>
                     <div className="box">
                         <input type="text" placeholder="UUID" value={uuid}
                             onChange={event => setUuid(event.target.value)} />
-                        <input type="text" placeholder="Schwestermodell 1" value={sisterModelOne}
+                        <input type="text" placeholder="Sister Model 1" value={sisterModelOne}
                             onChange={event => setSisterModelOne(event.target.value)} />
-                        <input type="text" placeholder="Schwestermodell 2" value={sisterModelTwo}
+                        <input type="text" placeholder="Sister Model 2" value={sisterModelTwo}
                             onChange={event => setSisterModelTwo(event.target.value)} />
-                        <input type="text" placeholder="Modelltyp" value={modelType}
+                        <input type="text" placeholder="Model Type" value={modelType}
                             onChange={event => setModelType(event.target.value)} />
-                        <input type="text" placeholder="Basisvehikel" value={baseCar}
+                        <input type="text" placeholder="Base Car" value={baseCar}
                             onChange={event => setBaseCar(event.target.value)} />
                     </div>
                 </>

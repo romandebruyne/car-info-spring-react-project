@@ -34,6 +34,8 @@ export function EditUserDataAsAdminPage(props: Props) {
                 setHouseNumber(body.data.houseNumber);
                 setAreaCode(body.data.areaCode);
                 setArea(body.data.area);
+                setSalution(body.data.salutation);
+                setCompany(body.data.company);
                 setEmail(body.data.email);
                 setPassword(body.data.password);
                 setSearchPartIsOpen(false);

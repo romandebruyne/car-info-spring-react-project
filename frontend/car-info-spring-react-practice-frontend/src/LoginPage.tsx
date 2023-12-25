@@ -23,11 +23,9 @@ export function LoginPage(props: Props) {
         <>
             <div>
                 <h2>Login</h2>
-                <label>Mail:&emsp;</label>
-                <input type="text" value={email} onChange={(event) =>
+                <input type="text" placeholder="Mail" value={email} onChange={(event) =>
                     setEmail(event.target.value)} /><br />
-                <label>Password:&emsp;</label>
-                <input type="password" value={password} onChange={(event) =>
+                <input type="password" placeholder="Password" value={password} onChange={(event) =>
                     setPassword(event.target.value)} /><br /><br />
 
                 <button

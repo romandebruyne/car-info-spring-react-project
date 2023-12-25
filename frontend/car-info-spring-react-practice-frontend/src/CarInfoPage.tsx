@@ -32,11 +32,11 @@ export function CarInfoPage(props: Props) {
     const [allFiltersAreOpen, setAllFiltersAreOpen] = useState(false);
 
     const tableColumns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 50 },
-        { field: 'model', headerName: 'Model', width: 50 },
-        { field: 'brand', headerName: 'Brand', width: 50 },
+        { field: 'id', headerName: 'ID', width: 75 },
+        { field: 'model', headerName: 'Model', width: 100 },
+        { field: 'brand', headerName: 'Brand', width: 100 },
         { field: 'indicator', headerName: 'Indicator', width: 50 },
-        { field: 'modelFamily', headerName: 'Model Family', width: 50 },
+        { field: 'modelFamily', headerName: 'Model Family', width: 100 },
         { field: 'launchDate', headerName: 'Launch Date', width: 50 },
         { field: 'modelYear', headerName: 'Model Year', width: 50 },
         { field: 'developmentType', headerName: 'Dev. Type', width: 50 },

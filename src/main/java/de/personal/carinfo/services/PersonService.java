@@ -197,7 +197,7 @@ public class PersonService {
 		}
 	}
 	
-	public Person editOrCreatePerson(Map<String, String> dataMap, boolean createPerson) {
+	public Person createOrEditPerson(Map<String, String> dataMap, boolean createPerson) {
 		PersonBuilder personBuilder = new PersonBuilder();
 		Person existingPerson;
 		long randomId;

@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Credentials } from "./Credentials";
-import { Person, editUserData, getPersonByEmail } from "./api";
+import { createPerson } from "./api";
 
-export type Props = {
-    creds: Credentials; onEdit: (openUserPage: boolean, newEmail: string, newPassword: string) => void;
-    onBack: () => void
-};
+export type Props = { creds: Credentials; onCreation: (openAdminPage: boolean) => void; onBack: () => void };
 
-export function EditUserDataAsUserPage(props: Props) {
-    const [editUserDataAsUserPageIsOpen, setEditUserDataAsUserPageIsOpen] = useState(true);
-    const [currentUser, setCurrentUser] = useState<null | Person>(null);
-    const [id, setId] = useState("");
+export function CreatePersonPage(props: Props) {
+    const [createPageIsOpen, setCreateUserPageIsOpen] = useState(true);
+
     const [firstName, setFirstName] = useState("");
     const [secondName, setSecondName] = useState("");
     const [birthDate, setBirthDate] = useState("");
@@ -22,60 +18,39 @@ export function EditUserDataAsUserPage(props: Props) {
     const [password, setPassword] = useState("");
     const [salutation, setSalution] = useState("");
     const [company, setCompany] = useState("");
-    const [errorOccurred, setErrorOccurred] = useState(false)
+    const [errorOccurred, setErrorOccurred] = useState(false);
 
-    useEffect(() => {
-        getPersonByEmail(props.creds, props.creds.email).then(body => setCurrentUser(body.data));
-    }, []);
-
-    function handleGetCurrentValues() {
-        if (currentUser !== null) {
-            setId(currentUser.id.toString());
-            setFirstName(currentUser.firstName);
-            setSecondName(currentUser.secondName);
-            setBirthDate(currentUser.birthDate);
-            setAddress(currentUser.address);
-            setHouseNumber(currentUser.houseNumber);
-            setAreaCode(currentUser.areaCode);
-            setArea(currentUser.area);
-            setSalution(currentUser.salutation);
-            setCompany(currentUser.company)
-            setEmail(props.creds.email);
-            setPassword(props.creds.password);
-        }
-    }
-
-    function handleDataEdit(props: Props) {
-        editUserData(props.creds, id, firstName, secondName, birthDate, address, houseNumber, areaCode, area,
+    function handleUserCreation() {
+        createPerson(props.creds, firstName, secondName, birthDate, address, houseNumber, areaCode, area,
             email, password, salutation, company).catch(handleErrorOccurred);
-        props.onEdit(true, email, password);
-    }
-
-    function handleErrorOccurred() {
-        setEditUserDataAsUserPageIsOpen(false);
-        setErrorOccurred(true);
+        props.onCreation(true);
     }
 
     function handleErrorOccurredWarning() {
         return (
             <div>
-                <p>Error occurred, try again please!</p>
+                <p>Error occurred, please try again!</p>
                 <button onClick={backFromError}>Back</button>
             </div>
         )
     }
 
+    function handleErrorOccurred() {
+        setCreateUserPageIsOpen(false);
+        setErrorOccurred(true);
+    }
+
     function backFromError() {
         setErrorOccurred(false);
-        setEditUserDataAsUserPageIsOpen(true);
+        setCreateUserPageIsOpen(true);
     }
 
     return (
         <>
-            {editUserDataAsUserPageIsOpen ?
+            {createPageIsOpen ?
                 <>
-                    <h2>Edit user data</h2>
-                    <p>Mandatory</p>
+                    <h2>Create person</h2>
+                    <p>Mandatory fields</p>
                     <input type="text" placeholder="First name" value={firstName}
                         onChange={event => setFirstName(event.target.value)} /><br />
                     <input type="text" placeholder="Second name" value={secondName}
@@ -95,17 +70,18 @@ export function EditUserDataAsUserPage(props: Props) {
                     <input type="text" placeholder="Password" value={password}
                         onChange={event => setPassword(event.target.value)} /><br />
 
-                    <p>Optional</p>
+                    <p>Optional fields</p>
                     <input type="text" placeholder="Salutation" value={salutation}
                         onChange={event => setSalution(event.target.value)} /><br />
                     <input type="text" placeholder="Company" value={company}
                         onChange={event => setCompany(event.target.value)} /><br /><br />
 
-                    <button onClick={handleGetCurrentValues}>Show current data</button>
                     <button
                         disabled={firstName === "" || secondName === "" || birthDate === "" || address === "" ||
                             houseNumber === "" || areaCode === "" || area === "" || email === "" || password === ""}
-                        onClick={() => handleDataEdit(props)}>Submit</button>
+                        onClick={handleUserCreation}
+                    > Submit
+                    </button>
                     <button onClick={props.onBack}>Back</button>
                 </> : null}
 

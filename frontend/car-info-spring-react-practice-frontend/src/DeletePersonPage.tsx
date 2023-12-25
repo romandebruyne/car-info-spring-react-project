@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { deleteUser, getPersonByEmail } from "./api";
+import { getPersonByEmail, deletePerson } from "./api";
 import { Credentials } from "./Credentials";
 
 export type Props = { creds: Credentials; onDelete: (openAdminPage: boolean) => void; onBack: () => void };
 
-export function DeleteUserPage(props: Props) {
+export function DeletePersonPage(props: Props) {
     const [emailEnteredByAdmin, setEmailEnteredByAdmin] = useState("");
     const [userFound, setUserFound] = useState(false);
     const [deletionPageIsOpen, setDeletionPageIsOpen] = useState(true);
@@ -23,7 +23,7 @@ export function DeleteUserPage(props: Props) {
 
     function handleDeletion(decision: boolean) {
         if (decision) {
-            deleteUser(props.creds, emailEnteredByAdmin);
+            deletePerson(props.creds, emailEnteredByAdmin);
             props.onDelete(true);
         } else {
             setEmailEnteredByAdmin("");
@@ -56,9 +56,8 @@ export function DeleteUserPage(props: Props) {
         <>
             {deletionPageIsOpen ?
                 <>
-                    <h2>Delete user</h2>
-                    <p>Please choose user by entering his/her mail:</p>
-                    <label>Mail:&emsp; </label>
+                    <h2>Delete person</h2>
+                    <p>Please choose person by entering his/her mail:</p>
                     <input type="text" placeholder="Mail" value={emailEnteredByAdmin}
                         onChange={(event) => setEmailEnteredByAdmin(event.target.value)} />
                     <button

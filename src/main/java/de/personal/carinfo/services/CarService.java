@@ -72,7 +72,7 @@ public class CarService {
 		}
 	}
 
-	public String getDateFromGermanDateFormat(String dateAsString) {
+	private String getDateFromGermanDateFormat(String dateAsString) {
 		String[] information = dateAsString.replace("\"", "").split("\\.");
 		return information[2] + "-" + information[1] + "-" + information[0];
 	}

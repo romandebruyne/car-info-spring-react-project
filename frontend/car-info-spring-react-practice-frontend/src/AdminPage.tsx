@@ -2,9 +2,9 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { Person, getAllPersons } from "./api";
 import { Credentials } from "./Credentials";
-import { EditUserDataAsAdminPage } from "./EditUserDataAsAdminPage";
-import { CreateUserPage } from "./CreateUserPage";
-import { DeleteUserPage } from "./DeleteUserPage";
+import { EditPersonDataAsAdminPage } from "./EditPersonDataAsAdminPage";
+import { CreatePersonPage } from "./CreatePersonPage";
+import { DeletePersonPage } from "./DeletePersonPage";
 
 export type Props = { onBack: () => void; creds: Credentials };
 
@@ -69,19 +69,13 @@ export function AdminPage(props: Props) {
     }
 
     const tableColumns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 76 },
-        { field: 'salutation', headerName: 'Salutation', width: 57 },
-        { field: 'firstName', headerName: 'First name', width: 100 },
-        { field: 'secondName', headerName: 'Second name', width: 100 },
-        { field: 'address', headerName: 'Address', width: 80 },
-        { field: 'houseNumber', headerName: 'House number', width: 60 },
-        { field: 'areaCode', headerName: 'Area code', width: 60 },
-        { field: 'area', headerName: 'Area', width: 50 },
-        { field: 'birthDate', headerName: 'Birth date', width: 120 },
-        { field: 'company', headerName: 'Company', width: 50 },
-        { field: 'email', headerName: 'EMail', width: 180 },
+        { field: 'id', headerName: 'ID', width: 80 },
+        { field: 'salutation', headerName: 'Sal.', width: 60 },
+        { field: 'firstName', headerName: 'First name', width: 200 },
+        { field: 'secondName', headerName: 'Second name', width: 200 },
+        { field: 'email', headerName: 'Mail', width: 400 },
         { field: 'dateOfEntry', headerName: 'Date of entry', width: 100 },
-        { field: 'deactivated', headerName: 'deactivated', width: 100 },
+        { field: 'deactivated', headerName: 'Deactivated?', width: 100 },
         {
             field: 'car', headerName: 'Model ID', width: 100,
             valueGetter: (params) => {
@@ -97,10 +91,10 @@ export function AdminPage(props: Props) {
         <>
             {adminPageIsOpen ?
                 <>
-                    <h2>Welcome, Admin!</h2>
-                    <button onClick={handleClickOnEditData}>Edit user data</button>
-                    <button onClick={handleClickOnCreateUser}>Create new user</button>
-                    <button onClick={handleClickOnDeleteUser}>Delete existing user</button>
+                    <h2>Welcome, admin {props.creds.email}!</h2>
+                    <button onClick={handleClickOnEditData}>Edit person data</button>
+                    <button onClick={handleClickOnCreateUser}>Create new person</button>
+                    <button onClick={handleClickOnDeleteUser}>Delete existing person</button>
                     <button onClick={props.onBack}>Back</button><br /><br />
 
                     <div>
@@ -115,11 +109,11 @@ export function AdminPage(props: Props) {
                     </div>
                 </> : null}
 
-            {editUserDataAsAdminPageIsOpen ? <EditUserDataAsAdminPage creds={props.creds}
+            {editUserDataAsAdminPageIsOpen ? <EditPersonDataAsAdminPage creds={props.creds}
                 onEdit={handleSuccesfulEdit} onBack={backFromEditUserDataByAdminPage} /> : null}
-            {createUserPageIsOpen ? <CreateUserPage creds={props.creds}
+            {createUserPageIsOpen ? <CreatePersonPage creds={props.creds}
                 onCreation={handleSuccesfulCreation} onBack={backFromCreateUserPage} /> : null}
-            {deleteUserPageIsOpen ? <DeleteUserPage creds={props.creds}
+            {deleteUserPageIsOpen ? <DeletePersonPage creds={props.creds}
                 onDelete={handleSuccesfulDeletion} onBack={backFromDeletePage} /> : null}
         </>
     )

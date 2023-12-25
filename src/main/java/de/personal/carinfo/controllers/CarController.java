@@ -24,7 +24,7 @@ public class CarController {
 	@Autowired
 	private CarService carService;
 	
-	@GetMapping("/cars/filterByFeature")
+	@GetMapping("/cars/feature")
 	public List<Car> getCarsByFeature(
 			@RequestParam(value = "feature", defaultValue = "", required = false) String feature,
 			@RequestParam(value = "value", defaultValue = "", required = false) String value) {
@@ -33,70 +33,51 @@ public class CarController {
 				"modelFamily", "developmentType", "modelStatus", "segment", "carBodyType", "carBodySpecification",
 				"engineType", "carProject", "limitation", "uuid", "sisterModelOne", "sisterModelTwo", "modelType",
 				"baseCar"));
-		List<Car> resultList = new ArrayList<>();
 		
 		if (allowedFeatures.contains(feature)) {
 			switch (feature) {
 			case "id":
-				resultList = this.carRepo.findAllById(Long.parseLong(value));
-				break;
+				return this.carRepo.findAllById(Long.parseLong(value));
 			case "model":
-				resultList = this.carRepo.findAllByModel(value);
-				break;
+				return this.carRepo.findAllByModel(value);
 			case "brand":
-				resultList = this.carRepo.findAllByBrand(value);
-				break;
+				return this.carRepo.findAllByBrand(value);
 			case "indicator":
-				resultList = this.carRepo.findAllByIndicator(value);
-				break;
+				return this.carRepo.findAllByIndicator(value);
 			case "modelFamily":
-				resultList = this.carRepo.findAllByModelFamily(value);
-				break;
+				return this.carRepo.findAllByModelFamily(value);
 			case "developmentType":
-				resultList = this.carRepo.findAllByDevelopmentType(value);
-				break;
+				return this.carRepo.findAllByDevelopmentType(value);
 			case "modelStatus":
-				resultList = this.carRepo.findAllByModelStatus(value);
-				break;
+				return this.carRepo.findAllByModelStatus(value);
 			case "segment":
-				resultList = this.carRepo.findAllBySegment(value);
-				break;
+				return this.carRepo.findAllBySegment(value);
 			case "carBodyType":
-				resultList = this.carRepo.findAllByCarBodyType(value);
-				break;
+				return this.carRepo.findAllByCarBodyType(value);
 			case "carBodySpecification":
-				resultList = this.carRepo.findAllByCarBodySpecification(value);
-				break;
+				return this.carRepo.findAllByCarBodySpecification(value);
 			case "engineType":
-				resultList = this.carRepo.findAllByEngineType(value);
-				break;
+				return this.carRepo.findAllByEngineType(value);
 			case "carProject":
-				resultList = this.carRepo.findAllByCarProject(value);
-				break;
+				return this.carRepo.findAllByCarProject(value);
 			case "limitation":
-				resultList = this.carRepo.findAllByLimitation(value);
-				break;
+				return this.carRepo.findAllByLimitation(value);
 			case "uuid":
-				resultList = this.carRepo.findAllByUuid(value);
-				break;
+				return this.carRepo.findAllByUuid(value);
 			case "sisterModelOne":
-				resultList = this.carRepo.findAllBySisterModelOne(value);
-				break;
+				return this.carRepo.findAllBySisterModelOne(value);
 			case "sisterModelTwo":
-				resultList = this.carRepo.findAllBySisterModelTwo(value);
-				break;
+				return this.carRepo.findAllBySisterModelTwo(value);
 			case "modelType":
-				resultList = this.carRepo.findAllByModelType(value);
-				break;
+				return this.carRepo.findAllByModelType(value);
 			case "baseCar":
-				resultList = this.carRepo.findAllByBaseCar(value);
-				break;
+				return this.carRepo.findAllByBaseCar(value);
 			}
 		}
-		return resultList; 
+		return new ArrayList<>(); 
 	}
 	
-	@GetMapping("/cars/fullTextSearch")
+	@GetMapping("/cars/search")
     public List<Car> getCarsByFullTextSearch(
             @RequestParam(value = "text", defaultValue = "", required = false) String text,
             @RequestParam(value = "id", defaultValue = "", required = false) String id,

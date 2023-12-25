@@ -30,7 +30,7 @@ export async function getCarInfoByFullTextSearch(creds: Credentials, text: strin
     carProject: string, limitation: string, uuid: string, sisterModelOne: string, sisterModelTwo: string,
     modelType: string, baseCar: string) {
 
-    let FINAL_URL = CARS_URL + "/fullTextSearch";
+    let FINAL_URL = CARS_URL + "/search";
 
     if (text !== "") {
         FINAL_URL = FINAL_URL + "?text=" + text + "&";
@@ -175,7 +175,7 @@ export async function getPersonByEmail(creds: Credentials, email: string) {
     return response;
 }
 
-export async function editUserData(creds: Credentials, id: string, firstName: string, secondName: string, birthDate: string,
+export async function editPersonData(creds: Credentials, id: string, firstName: string, secondName: string, birthDate: string,
     address: string, houseNumber: string, areaCode: string, area: string, email: string, password: string,
     salutation: string, company: string) {
 
@@ -207,7 +207,7 @@ export async function editUserData(creds: Credentials, id: string, firstName: st
     return response;
 }
 
-export async function createUser(creds: Credentials, firstName: string, secondName: string, birthDate: string,
+export async function createPerson(creds: Credentials, firstName: string, secondName: string, birthDate: string,
     address: string, houseNumber: string, areaCode: string, area: string, email: string, password: string,
     salutation: string, company: string) {
 
@@ -238,7 +238,7 @@ export async function createUser(creds: Credentials, firstName: string, secondNa
     return response;
 }
 
-export async function deleteUser(creds: Credentials, email: string) {
+export async function deletePerson(creds: Credentials, email: string) {
     const response = await axios.delete(PERSONS_URL + "/" + email,
         { headers: { 'Authorization': 'Basic ' + encodePassword(creds) } });
     return response;

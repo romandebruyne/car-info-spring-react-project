@@ -47,7 +47,6 @@ public class CarBuilder {
 	public CarBuilder withIndicator(String indicator) {
 		this.indicator = indicator;
 		return this;
-		
 	}
 	
 	public CarBuilder withModelFamily(String modelFamily) {

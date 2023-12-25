@@ -62,7 +62,7 @@ public class PersonController {
 			dataMap = this.personService.createMapping(firstName, secondName, birthDate, address, 
 					houseNumber, areaCode, area, email, this.bcryptEncoder.encode(password), salutation, 
 					company);
-			personToCreate = this.personService.editOrCreatePerson(dataMap, true);
+			personToCreate = this.personService.createOrEditPerson(dataMap, true);
 			return new ResponseEntity<>(this.personRepo.save(personToCreate), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -91,7 +91,7 @@ public class PersonController {
             dataMap = this.personService.createMapping(firstName, secondName, birthDate,
             		address, houseNumber, areaCode, area, email, this.bcryptEncoder.encode(password),
             		salutation, company);
-            personToEdit = this.personService.editOrCreatePerson(dataMap, false);
+            personToEdit = this.personService.createOrEditPerson(dataMap, false);
             return new ResponseEntity<>(this.personRepo.save(personToEdit), HttpStatus.OK);
             
         } catch (Exception e) {

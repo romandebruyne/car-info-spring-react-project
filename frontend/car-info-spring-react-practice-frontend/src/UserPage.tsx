@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Credentials } from "./Credentials";
 import { CarInfoPage } from "./CarInfoPage";
-import { EditUserDataAsUserPage } from "./EditUserDataAsUserPage";
+import { EditPersonDataAsUserPage } from "./EditPersonDataAsUserPage";
 
 export type Props = { creds: Credentials; onBack: () => void };
 
@@ -41,15 +41,15 @@ export function UserPage(props: Props) {
         <>
             {userPageIsOpen ?
                 <>
-                    <h2>Welcome!</h2>
+                    <h2>Welcome, user {props.creds.email}!</h2>
                     <button onClick={handleClickOnStatistics}>Show car information</button>
-                    <button onClick={handleClickOnEditData}>Edit user data</button>
+                    <button onClick={handleClickOnEditData}>Edit person data</button>
                     <button onClick={props.onBack}>Back</button>
                 </> : null}
 
             {statisticsPageExtendedIsOpen ? <CarInfoPage creds={ credentials }
                 onBack={ backFromStatisticspageExtended } /> : null}
-            {editUserDataPageIsOpen ? <EditUserDataAsUserPage creds={ credentials } onEdit={ handleSuccesfulEdit } 
+            {editUserDataPageIsOpen ? <EditPersonDataAsUserPage creds={ credentials } onEdit={ handleSuccesfulEdit } 
                 onBack={ backFromEditUserDataPage } /> : null}
         </>
     )

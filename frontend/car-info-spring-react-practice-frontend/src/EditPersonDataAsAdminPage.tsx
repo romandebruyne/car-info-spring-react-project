@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { editUserData, getPersonByEmail } from "./api";
+import { getPersonByEmail, editPersonData } from "./api";
 import { Credentials } from "./Credentials";
 
 export type Props = { creds: Credentials; onEdit: (openAdminPage: boolean) => void; onBack: () => void };
 
-export function EditUserDataAsAdminPage(props: Props) {
+export function EditPersonDataAsAdminPage(props: Props) {
     const [searchPartIsOpen, setSearchPartIsOpen] = useState(true);
     const [enteringDataPartIsOpen, setEnteringDataPartIsOpen] = useState(false);
 
@@ -47,7 +47,7 @@ export function EditUserDataAsAdminPage(props: Props) {
     }
 
     function handleUserDataEdit() {
-        editUserData(props.creds, id, firstName, secondName, birthDate, address, houseNumber, areaCode, area,
+        editPersonData(props.creds, id, firstName, secondName, birthDate, address, houseNumber, areaCode, area,
             email, password, salutation, company).catch(handleErrorOccurred);
         props.onEdit(true);
     }
@@ -83,15 +83,14 @@ export function EditUserDataAsAdminPage(props: Props) {
         <>
             {searchPartIsOpen ?
                 <>
-                    <h2>Edit user data</h2>
-                    <p>Please choose user by entering his/her mail:</p>
-                    <label>Mail:&emsp; </label>
+                    <h2>Edit person data</h2>
+                    <p>Please choose person by entering his/her mail:</p>
                     <input type="text" placeholder="Mail" value={ emailEnteredByAdmin }
                         onChange={(event) => setEmailEnteredByAdmin(event.target.value)} />
                     <button
                         disabled={emailEnteredByAdmin === ""}
                         onClick={handleClickOnSearchUser}
-                    > Search user
+                    > Search person
                     </button>
 
                     <button onClick={props.onBack}>Back</button>
@@ -100,7 +99,8 @@ export function EditUserDataAsAdminPage(props: Props) {
 
             {enteringDataPartIsOpen ?
                 <>
-                    <p>Mandatory</p>
+                    <h2>Edit person data</h2>
+                    <p>Mandatory fields</p>
                     <input type="text" placeholder="First name" value={firstName}
                         onChange={event => setFirstName(event.target.value)} /><br />
                     <input type="text" placeholder="Second name" value={secondName}
@@ -117,10 +117,10 @@ export function EditUserDataAsAdminPage(props: Props) {
                         onChange={event => setArea(event.target.value)} /><br />
                     <input type="text" placeholder="Mail" value={email}
                         onChange={event => setEmail(event.target.value)} /><br />
-                    <input type="text" placeholder="Password" value={password}
+                    <input type="password" placeholder="Password" value={password}
                         onChange={event => setPassword(event.target.value)} /><br />
 
-                    <p>Optional</p>
+                    <p>Optional fields</p>
                     <input type="text" placeholder="Salutation" value={salutation}
                         onChange={event => setSalution(event.target.value)} /><br />
                     <input type="text" placeholder="Company" value={company}
@@ -130,7 +130,7 @@ export function EditUserDataAsAdminPage(props: Props) {
                         disabled={firstName === "" || secondName === "" || birthDate === "" || address === "" ||
                             houseNumber === "" || areaCode === "" || area === "" || email === "" || password === ""}
                         onClick={handleUserDataEdit}
-                    >Submit
+                    > Submit
                     </button>
                     <button onClick={backFromEnteringData}>Back</button>
                 </>

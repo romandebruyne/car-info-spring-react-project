@@ -31,8 +31,7 @@ export function LoginPage(props: Props) {
                 <button
                     disabled={email === "" || password === ""}
                     onClick={() => handleLogin(props)}
-                >
-                    Login
+                > Login
                 </button>
                 <button onClick={props.onBack}>Back</button>
             </div>

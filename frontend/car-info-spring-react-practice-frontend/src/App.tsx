@@ -51,7 +51,7 @@ function App() {
   function handleDeactivatedUserLogin() {
     return (
       <div>
-        <p>Please contact the administrator!</p>
+        <p>Account is deactivated, please contact the administrator!</p>
         <button onClick={backFromUnauthorizedLogin}>Back to login</button>
       </div>
     )

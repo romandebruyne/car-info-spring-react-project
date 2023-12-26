@@ -2,17 +2,24 @@ import { useState } from "react";
 import { Credentials } from "./Credentials";
 import { CarInfoPage } from "./CarInfoPage";
 import { EditPersonDataAsUserPage } from "./EditPersonDataAsUserPage";
+import { TopThreePage } from "./TopThreePage";
 
 export type Props = { creds: Credentials; onBack: () => void };
 
 export function UserPage(props: Props) {
     const [userPageIsOpen, setUserPageIsOpen] = useState(true);
-    const [statisticsPageExtendedIsOpen, setStatisticsPageExtendedIsOpen] = useState(false);
+    const [carInfoPageIsOpen, setCarInfoPageIsOpen] = useState(false);
+    const [topThreeElementsPageIsOpen, setTopThreeElementsPageIsOpen] = useState(false);
     const [editUserDataPageIsOpen, setEditUserDataPageIsOpen] = useState(false);
     const [credentials, setCredentials] = useState<Credentials>(props.creds);
 
-    function handleClickOnStatistics() {
-        setStatisticsPageExtendedIsOpen(true);
+    function handleClickOnCarInfo() {
+        setCarInfoPageIsOpen(true);
+        setUserPageIsOpen(false);
+    }
+
+    function handleClickOnTopThreeElements() {
+        setTopThreeElementsPageIsOpen(true);
         setUserPageIsOpen(false);
     }
 
@@ -27,8 +34,13 @@ export function UserPage(props: Props) {
         setUserPageIsOpen(openUserPage);
     }
 
-    function backFromStatisticspageExtended() {
-        setStatisticsPageExtendedIsOpen(false);
+    function backFromCarInfoPage() {
+        setCarInfoPageIsOpen(false);
+        setUserPageIsOpen(true);
+    }
+
+    function backFromTopThreeElementsPage() {
+        setTopThreeElementsPageIsOpen(false);
         setUserPageIsOpen(true);
     }
 
@@ -42,14 +54,16 @@ export function UserPage(props: Props) {
             {userPageIsOpen ?
                 <>
                     <h2>Welcome, user {props.creds.email}!</h2>
-                    <button onClick={handleClickOnStatistics}>Show car information</button>
+                    <button onClick={ handleClickOnCarInfo }>Show car information</button>
+                    <button onClick={ handleClickOnTopThreeElements }>Show top three elements</button>
                     <button onClick={handleClickOnEditData}>Edit person data</button>
                     <button onClick={props.onBack}>Back</button>
                 </> : null}
 
-            {statisticsPageExtendedIsOpen ? <CarInfoPage creds={ credentials }
-                onBack={ backFromStatisticspageExtended } /> : null}
-            {editUserDataPageIsOpen ? <EditPersonDataAsUserPage creds={ credentials } onEdit={ handleSuccesfulEdit } 
+            { carInfoPageIsOpen ? <CarInfoPage creds={ credentials }
+                onBack={ backFromCarInfoPage } /> : null}
+            { topThreeElementsPageIsOpen ? <TopThreePage onBack={ backFromTopThreeElementsPage } /> : null }
+            { editUserDataPageIsOpen ? <EditPersonDataAsUserPage creds={ credentials } onEdit={ handleSuccesfulEdit } 
                 onBack={ backFromEditUserDataPage } /> : null}
         </>
     )

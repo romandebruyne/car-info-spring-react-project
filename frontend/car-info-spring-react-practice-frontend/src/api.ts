@@ -17,7 +17,9 @@ export type Person = {
     id: number, salutation: string, firstName: string, secondName: string, birthDate: string,
     address: string, houseNumber: string, areaCode: string, area: string, email: string, deactivated: boolean,
     dateOfEntry: number, company: string, password: string, car: Car
-};
+}
+
+export type TopThreeElement = { id: string, feature: string, name: string, count: number };
 
 export async function login(email: string, password: string) {
     const response = await axios.post(LOGIN_URL, { email: email, password: password });
@@ -164,9 +166,9 @@ export async function getCarInfoByFullTextSearch(creds: Credentials, text: strin
 }
 
 export async function getAllPersons(creds: Credentials) {
-    const responsePers = await axios.get<Person[]>(PERSONS_URL,
+    const response = await axios.get<Person[]>(PERSONS_URL,
         { headers: { 'Authorization': 'Basic ' + encodePassword(creds) } });
-    return responsePers;
+    return response;
 }
 
 export async function getPersonByEmail(creds: Credentials, email: string) {
@@ -241,5 +243,16 @@ export async function createPerson(creds: Credentials, firstName: string, second
 export async function deletePerson(creds: Credentials, email: string) {
     const response = await axios.delete(PERSONS_URL + "/" + email,
         { headers: { 'Authorization': 'Basic ' + encodePassword(creds) } });
+    return response;
+}
+
+export async function getTopThreeElementsByFeature(feature: string) {
+    let FINAL_URL = CARS_URL + "/topThree?feature";
+
+    if (feature !== "") {
+        FINAL_URL = FINAL_URL + "=" + feature;
+    }
+
+    const response = await axios.get<Object>(FINAL_URL);
     return response;
 }

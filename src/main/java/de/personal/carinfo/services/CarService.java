@@ -7,7 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import de.personal.carinfo.objects.Car;
 import de.personal.carinfo.objects.CarBuilder;
+import de.personal.carinfo.objects.Person;
 import de.personal.carinfo.repos.CarRepository;
 
 @Service
@@ -87,6 +93,114 @@ public class CarService {
 					resultList.add(car);
 				}
 			}			
+		}
+		return resultList;
+	}
+	
+	public Map<String, Integer> countElementsPerFeature(List<Person> list, String feature) {
+		Map<String, Integer> resultMap = new HashMap<String, Integer>();
+		int count;
+		
+		switch (feature) {
+		case "model":
+			for (Person listItem : list) {
+				if (listItem.getCar() != null) {
+					if (!resultMap.containsKey(listItem.getCar().getModel())) {
+						resultMap.put(listItem.getCar().getModel(), 1);
+					} else {
+						count = resultMap.get(listItem.getCar().getModel());
+						resultMap.put(listItem.getCar().getModel(), count + 1);
+					}
+				}
+			}
+			break;
+		case "brand":
+			for (Person listItem : list) {
+				if (listItem.getCar() != null) {
+					if (!resultMap.containsKey(listItem.getCar().getBrand())) {
+						resultMap.put(listItem.getCar().getBrand(), 1);
+					} else {
+						count = resultMap.get(listItem.getCar().getBrand());
+						resultMap.put(listItem.getCar().getBrand(), count + 1);
+					}
+				}
+			}
+			break;
+		case "engineType":
+			for (Person listItem : list) {
+				if (listItem.getCar() != null) {
+					if (!resultMap.containsKey(listItem.getCar().getEngineType())) {
+						resultMap.put(listItem.getCar().getEngineType(), 1);
+					} else {
+						count = resultMap.get(listItem.getCar().getEngineType());
+						resultMap.put(listItem.getCar().getEngineType(), count + 1);
+					}
+				}
+			}
+			break;
+		case "modelFamily":
+			for (Person listItem : list) {
+				if (listItem.getCar() != null) {
+					if (!resultMap.containsKey(listItem.getCar().getModelFamily())) {
+						resultMap.put(listItem.getCar().getModelFamily(), 1);
+					} else {
+						count = resultMap.get(listItem.getCar().getModelFamily());
+						resultMap.put(listItem.getCar().getModelFamily(), count + 1);
+					}
+				}
+			}
+			break;
+		case "carBodyType":
+			for (Person listItem : list) {
+				if (listItem.getCar() != null) {
+					if (!resultMap.containsKey(listItem.getCar().getCarBodyType())) {
+						resultMap.put(listItem.getCar().getCarBodyType(), 1);
+					} else {
+						count = resultMap.get(listItem.getCar().getCarBodyType());
+						resultMap.put(listItem.getCar().getCarBodyType(), count + 1);
+					}
+				}
+			}
+			break;
+		case "segment":
+			for (Person listItem : list) {
+				if (listItem.getCar() != null) {
+					if (!resultMap.containsKey(listItem.getCar().getSegment())) {
+						resultMap.put(listItem.getCar().getSegment(), 1);
+					} else {
+						count = resultMap.get(listItem.getCar().getSegment());
+						resultMap.put(listItem.getCar().getSegment(), count + 1);
+					}
+				}
+			}
+			break;
+		}
+		
+		return resultMap;
+	}
+	
+	public Map<String, Integer> sortMapByValues(Map<String, Integer> unsortedMap, boolean sortAscending) {
+		if (sortAscending) {
+			return unsortedMap.entrySet().stream()
+                    .sorted(Map.Entry.comparingByValue())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                    		(e1, e2) -> e1, LinkedHashMap::new));
+		} else {
+			return unsortedMap.entrySet().stream()
+                    .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                    		(e1, e2) -> e1, LinkedHashMap::new));
+		}
+	}
+	
+	public List<Integer> getThreeHighestValuesInMap(Map<String, Integer> descendingSortedMap) {
+		List<Integer> resultList = new ArrayList<>();
+		while (resultList.size() < 3) {
+			for (Integer value : descendingSortedMap.values()) {
+				if (!resultList.contains(value)) {
+					resultList.add(value);
+				}
+			}
 		}
 		return resultList;
 	}

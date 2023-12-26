@@ -3,8 +3,13 @@ package de.personal.carinfo.controllers;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.personal.carinfo.objects.Car;
 import de.personal.carinfo.repos.CarRepository;
+import de.personal.carinfo.repos.PersonRepository;
 import de.personal.carinfo.services.CarService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 public class CarController {
+	private Logger logger = LoggerFactory.getLogger(CarController.class);
+	
+	@Autowired
+	private PersonRepository personRepo;
+	
 	@Autowired
 	private CarRepository carRepo;
 	
@@ -197,5 +208,37 @@ public class CarController {
         }
 
         return resultList;
+    }
+	
+    @GetMapping("/cars/topThree")
+    public Map<String, Integer> getCarsByFeatureCount(
+            @RequestParam(value = "feature", defaultValue = "", required = false) String feature) {
+        
+        List<String> allowedFeatures = new ArrayList<>(Arrays.asList("model", "brand", "engineType",
+                "modelFamily", "carBodyType", "segment"));
+        List<Integer> highestValues;
+        Map<String, Integer> countMap, carsWithHighestValues = new HashMap<>();
+        
+        try {
+            if (allowedFeatures.contains(feature)) {        
+                countMap = this.carService.countElementsPerFeature(this.personRepo.findAll(), feature);
+                highestValues = this.carService.getThreeHighestValuesInMap(
+                		this.carService.sortMapByValues(countMap, false));
+                
+                carsWithHighestValues = countMap
+                        .entrySet()
+                        .stream()
+                        .filter(s -> s.getValue() >= highestValues.get(2))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                
+                carsWithHighestValues = this.carService.sortMapByValues(carsWithHighestValues, false);
+            } else {
+                throw new UnknownFeatureException("Feature unknown");
+            }
+        } catch (UnknownFeatureException e) {
+            this.logger.info(e.getMessage());
+        }
+        
+        return carsWithHighestValues;           
     }
 }

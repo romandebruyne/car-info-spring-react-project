@@ -178,8 +178,8 @@ export async function getPersonByEmail(creds: Credentials, email: string) {
 }
 
 export async function editPersonData(creds: Credentials, id: string, firstName: string, secondName: string, birthDate: string,
-    address: string, houseNumber: string, areaCode: string, area: string, email: string, password: string,
-    salutation: string, company: string) {
+    address: string, houseNumber: string, areaCode: string, area: string, oldEmail: string, newEmail: string, salutation: string,
+    company: string) {
 
     let FINAL_URL = PERSONS_URL + "?id=" + id + "&" +
         "firstName=" + firstName + "&" +
@@ -189,8 +189,8 @@ export async function editPersonData(creds: Credentials, id: string, firstName: 
         "houseNumber=" + houseNumber + "&" +
         "areaCode=" + areaCode + "&" +
         "area=" + area + "&" +
-        "email=" + email + "&" +
-        "password=" + password + "&";
+        "oldEmail=" + oldEmail + "&" +
+        "newEmail=" + newEmail + "&";
 
     if (salutation !== "") {
         FINAL_URL = FINAL_URL + "salutation=" + salutation + "&";

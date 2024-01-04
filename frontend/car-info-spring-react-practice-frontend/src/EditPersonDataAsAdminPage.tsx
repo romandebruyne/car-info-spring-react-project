@@ -16,8 +16,8 @@ export function EditPersonDataAsAdminPage(props: Props) {
     const [houseNumber, setHouseNumber] = useState("");
     const [areaCode, setAreaCode] = useState("");
     const [area, setArea] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [oldEmail, setOldEmail] = useState("");
+    const [newEmail, setNewEmail] = useState("");
     const [salutation, setSalution] = useState("");
     const [company, setCompany] = useState("");
     const [emailEnteredByAdmin, setEmailEnteredByAdmin] = useState("");
@@ -36,8 +36,8 @@ export function EditPersonDataAsAdminPage(props: Props) {
                 setArea(body.data.area);
                 setSalution(body.data.salutation);
                 setCompany(body.data.company);
-                setEmail(body.data.email);
-                setPassword(body.data.password);
+                setOldEmail(body.data.email);
+                setNewEmail(body.data.email);
                 setSearchPartIsOpen(false);
                 setEnteringDataPartIsOpen(true);
             } else {
@@ -48,7 +48,7 @@ export function EditPersonDataAsAdminPage(props: Props) {
 
     function handleUserDataEdit() {
         editPersonData(props.creds, id, firstName, secondName, birthDate, address, houseNumber, areaCode, area,
-            email, password, salutation, company).catch(handleErrorOccurred);
+            oldEmail, newEmail, salutation, company).catch(handleErrorOccurred);
         props.onEdit(true);
     }
 
@@ -56,7 +56,7 @@ export function EditPersonDataAsAdminPage(props: Props) {
         return (
             <div>
                 <p>Error occurred, please try again!</p>
-                <button onClick={backFromError}>Back</button>
+                <button onClick={ backFromError }>Back</button>
             </div>
         )
     }
@@ -88,12 +88,12 @@ export function EditPersonDataAsAdminPage(props: Props) {
                     <input type="text" placeholder="Mail" value={ emailEnteredByAdmin }
                         onChange={(event) => setEmailEnteredByAdmin(event.target.value)} />
                     <button
-                        disabled={emailEnteredByAdmin === ""}
-                        onClick={handleClickOnSearchUser}
+                        disabled={ emailEnteredByAdmin === "" }
+                        onClick={ handleClickOnSearchUser }
                     > Search person
                     </button>
 
-                    <button onClick={props.onBack}>Back</button>
+                    <button onClick={ props.onBack }>Back</button>
 
                 </> : null}
 
@@ -115,10 +115,8 @@ export function EditPersonDataAsAdminPage(props: Props) {
                         onChange={event => setAreaCode(event.target.value)} /><br />
                     <input type="text" placeholder="Area" value={area}
                         onChange={event => setArea(event.target.value)} /><br />
-                    <input type="text" placeholder="Mail" value={email}
-                        onChange={event => setEmail(event.target.value)} /><br />
-                    <input type="password" placeholder="Password" value={password}
-                        onChange={event => setPassword(event.target.value)} /><br />
+                    <input type="text" placeholder="Mail" value={newEmail}
+                        onChange={event => setNewEmail(event.target.value)} /><br />
 
                     <p>Optional fields</p>
                     <input type="text" placeholder="Salutation" value={salutation}
@@ -127,16 +125,16 @@ export function EditPersonDataAsAdminPage(props: Props) {
                         onChange={event => setCompany(event.target.value)} /><br /><br />
 
                     <button
-                        disabled={firstName === "" || secondName === "" || birthDate === "" || address === "" ||
-                            houseNumber === "" || areaCode === "" || area === "" || email === "" || password === ""}
-                        onClick={handleUserDataEdit}
+                        disabled={ firstName === "" || secondName === "" || birthDate === "" || address === "" ||
+                            houseNumber === "" || areaCode === "" || area === "" || newEmail === "" }
+                        onClick={ handleUserDataEdit }
                     > Submit
                     </button>
-                    <button onClick={backFromEnteringData}>Back</button>
+                    <button onClick={ backFromEnteringData }>Back</button>
                 </>
-                : null}
+                : null }
 
-            {errorOccurred ? showErrorOccurredWarning() : null}
+            { errorOccurred ? showErrorOccurredWarning() : null }
         </>
     )
 }

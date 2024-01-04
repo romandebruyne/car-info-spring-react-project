@@ -3,7 +3,7 @@ import { Credentials } from "./Credentials";
 import { Person, getPersonByEmail, editPersonData } from "./api";
 
 export type Props = {
-    creds: Credentials; onEdit: (openUserPage: boolean, newEmail: string, newPassword: string) => void;
+    creds: Credentials; onEdit: (openUserPage: boolean, newEmail: string) => void;
     onBack: () => void
 }
 
@@ -18,8 +18,8 @@ export function EditPersonDataAsUserPage(props: Props) {
     const [houseNumber, setHouseNumber] = useState("");
     const [areaCode, setAreaCode] = useState("");
     const [area, setArea] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [oldEmail, setOldEmail] = useState("");
+    const [newEmail, setNewEmail] = useState("");
     const [salutation, setSalution] = useState("");
     const [company, setCompany] = useState("");
     const [errorOccurred, setErrorOccurred] = useState(false)
@@ -40,15 +40,15 @@ export function EditPersonDataAsUserPage(props: Props) {
             setArea(currentUser.area);
             setSalution(currentUser.salutation);
             setCompany(currentUser.company)
-            setEmail(props.creds.email);
-            setPassword(props.creds.password);
+            setOldEmail(props.creds.email);
+            setNewEmail(props.creds.email);
         }
     }
 
     function handleDataEdit(props: Props) {
         editPersonData(props.creds, id, firstName, secondName, birthDate, address, houseNumber, areaCode, area,
-            email, password, salutation, company).catch(handleErrorOccurred);
-        props.onEdit(true, email, password);
+            oldEmail, newEmail, salutation, company).catch(handleErrorOccurred);
+        props.onEdit(true, newEmail);
     }
 
     function handleErrorOccurred() {
@@ -60,7 +60,7 @@ export function EditPersonDataAsUserPage(props: Props) {
         return (
             <div>
                 <p>Error occurred, try again please!</p>
-                <button onClick={backFromError}>Back</button>
+                <button onClick={ backFromError }>Back</button>
             </div>
         )
     }
@@ -90,10 +90,8 @@ export function EditPersonDataAsUserPage(props: Props) {
                         onChange={event => setAreaCode(event.target.value)} /><br />
                     <input type="text" placeholder="Area" value={area}
                         onChange={event => setArea(event.target.value)} /><br />
-                    <input type="text" placeholder="Mail" value={email}
-                        onChange={event => setEmail(event.target.value)} /><br />
-                    <input type="password" placeholder="Password" value={password}
-                        onChange={event => setPassword(event.target.value)} /><br />
+                    <input type="text" placeholder="Mail" value={newEmail}
+                        onChange={event => setNewEmail(event.target.value)} /><br />
 
                     <p>Optional fields</p>
                     <input type="text" placeholder="Salutation" value={salutation}
@@ -103,10 +101,10 @@ export function EditPersonDataAsUserPage(props: Props) {
 
                     <button onClick={handleGetCurrentValues}>Show current data</button>
                     <button
-                        disabled={firstName === "" || secondName === "" || birthDate === "" || address === "" ||
-                            houseNumber === "" || areaCode === "" || area === "" || email === "" || password === ""}
-                        onClick={() => handleDataEdit(props)}>Submit</button>
-                    <button onClick={props.onBack}>Back</button>
+                        disabled={ firstName === "" || secondName === "" || birthDate === "" || address === "" ||
+                            houseNumber === "" || areaCode === "" || area === "" || newEmail === "" }
+                        onClick={ () => handleDataEdit(props) }>Submit</button>
+                    <button onClick={ props.onBack }>Back</button>
                 </> : null}
 
             {errorOccurred ? showErrorOccurredWarning() : null}

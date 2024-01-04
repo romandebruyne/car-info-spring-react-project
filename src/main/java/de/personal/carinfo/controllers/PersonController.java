@@ -66,9 +66,9 @@ public class PersonController {
 		Person personToCreate;
 
 		try {
-			dataMap = this.personService.createMapping(firstName, secondName, birthDate, address, 
-					houseNumber, areaCode, area, email, this.bCryptEncoder.encode(password), salutation, 
-					company);
+			dataMap = this.personService.createDataMappingForPersonCreation(firstName, secondName, birthDate,
+					address,  houseNumber, areaCode, area, email, this.bCryptEncoder.encode(password),
+					salutation, company);
 			personToCreate = this.personService.createOrEditPerson(dataMap, true);
 			return new ResponseEntity<>(this.personRepo.save(personToCreate), HttpStatus.OK);
 		} catch (Exception e) {
@@ -86,8 +86,8 @@ public class PersonController {
             @RequestParam(value = "houseNumber", defaultValue = "", required = true) String houseNumber,
             @RequestParam(value = "areaCode", defaultValue = "", required = true) String areaCode,
             @RequestParam(value = "area", defaultValue = "", required = true) String area,
-            @RequestParam(value = "email", defaultValue = "", required = true) String email,
-            @RequestParam(value = "password", defaultValue = "", required = true) String password,
+            @RequestParam(value = "oldEmail", defaultValue = "", required = true) String oldEmail,
+            @RequestParam(value = "newEmail", defaultValue = "", required = true) String newEmail,
             @RequestParam(value = "salutation", defaultValue = "", required = false) String salutation,
             @RequestParam(value = "company", defaultValue = "", required = false) String company) {
 
@@ -95,9 +95,9 @@ public class PersonController {
         Person personToEdit;
         
         try {
-            dataMap = this.personService.createMapping(firstName, secondName, birthDate,
-            		address, houseNumber, areaCode, area, email, this.bCryptEncoder.encode(password),
-            		salutation, company);
+        	this.logger.info("HERE");
+            dataMap = this.personService.createDataMappingForPersonDataEdit(firstName, secondName, birthDate,
+            		address, houseNumber, areaCode, area, oldEmail, newEmail, salutation, company);
             personToEdit = this.personService.createOrEditPerson(dataMap, false);
             return new ResponseEntity<>(this.personRepo.save(personToEdit), HttpStatus.OK);
             

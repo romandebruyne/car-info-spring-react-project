@@ -227,8 +227,12 @@ public class PersonService {
 			personBuilder.withDateOfEntry(LocalDate.now());
 			personBuilder.withRole(Role.USER);
 			
+			if (dataMap.get("password") != null) {
+				personBuilder.withPassword(dataMap.get("password"));
+			}
+			
 		} else {
-			existingPerson = this.personRepo.findByEmail(dataMap.get("email")).orElse(null);
+			existingPerson = this.personRepo.findByEmail(dataMap.get("oldEmail")).orElse(null);
 			personBuilder = takeOverCurrentInformation(existingPerson);
 		}
 
@@ -260,12 +264,8 @@ public class PersonService {
 			personBuilder.withArea(dataMap.get("area"));
 		}
 
-		if (dataMap.get("email") != null) {
-			personBuilder.withEmail(dataMap.get("email"));
-		}
-
-		if (dataMap.get("password") != null) {
-			personBuilder.withPassword(dataMap.get("password"));
+		if (dataMap.get("newEmail") != null) {
+			personBuilder.withEmail(dataMap.get("newEmail"));
 		}
 
 		if (dataMap.get("salutation") != null) {
@@ -313,9 +313,9 @@ public class PersonService {
 		return personBuilder;
 	}
 
-	public Map<String, String> createMapping(String firstName, String secondName, String birthDate,
-			String address, String houseNumber, String areaCode, String area, String email, String password,
-			String salutation, String company) {
+	public Map<String, String> createDataMappingForPersonCreation(String firstName, String secondName,
+			String birthDate, String address, String houseNumber, String areaCode, String area, String email,
+			String password, String salutation, String company) {
 		Map<String, String> mapping = new HashMap<>();
 
 		mapping.put("firstName", firstName);
@@ -327,6 +327,26 @@ public class PersonService {
 		mapping.put("area", area);
 		mapping.put("email", email);
 		mapping.put("password", password);
+		mapping.put("salutation", salutation);
+		mapping.put("company", company);
+
+		return mapping;
+	}
+	
+	public Map<String, String> createDataMappingForPersonDataEdit(String firstName, String secondName,
+			String birthDate, String address, String houseNumber, String areaCode, String area, 
+			String oldEmail, String newEmail, String salutation, String company) {
+		Map<String, String> mapping = new HashMap<>();
+
+		mapping.put("firstName", firstName);
+		mapping.put("secondName", secondName);
+		mapping.put("birthDate", birthDate);
+		mapping.put("address", address);
+		mapping.put("houseNumber", houseNumber);
+		mapping.put("areaCode", areaCode);
+		mapping.put("area", area);
+		mapping.put("oldEmail", oldEmail);
+		mapping.put("newEmail", newEmail);
 		mapping.put("salutation", salutation);
 		mapping.put("company", company);
 

@@ -35,8 +35,8 @@ export function UserPage(props: Props) {
         setUserPageIsOpen(false);
     }
 
-    function handleSuccesfulDataEdit(openUserPage: boolean, newEmail: string, newPassword: string) {
-        setCredentials({ email: newEmail, password: newPassword })
+    function handleSuccesfulDataEdit(openUserPage: boolean, newEmail: string) {
+        setCredentials({ email: newEmail, password: credentials.password })
         setEditUserDataPageIsOpen(false);
         setUserPageIsOpen(openUserPage);
     }

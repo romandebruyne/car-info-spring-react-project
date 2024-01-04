@@ -17,7 +17,7 @@ export function LoginPage(props: Props) {
                     props.onSubmit({ email: email, password: password }, body.data);
                 }
             })
-    };
+    }
 
     return (
         <>

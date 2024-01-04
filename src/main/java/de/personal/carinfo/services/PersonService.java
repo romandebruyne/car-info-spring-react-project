@@ -229,22 +229,7 @@ public class PersonService {
 			
 		} else {
 			existingPerson = this.personRepo.findByEmail(dataMap.get("email")).orElse(null);
-			personBuilder.withId(existingPerson.getId());
-			personBuilder.withSalutation(existingPerson.getSalutation());
-			personBuilder.withFirstName(existingPerson.getFirstName());
-			personBuilder.withSecondName(existingPerson.getSecondName());
-			personBuilder.withBirthDate(existingPerson.getBirthDate());
-			personBuilder.withAddress(existingPerson.getAddress());
-			personBuilder.withHouseNumber(existingPerson.getHouseNumber());
-			personBuilder.withAreaCode(existingPerson.getAreaCode());
-			personBuilder.withArea(existingPerson.getArea());
-			personBuilder.withEmail(existingPerson.getEmail());
-			personBuilder.withDeactivated(existingPerson.isDeactivated());
-			personBuilder.withDateOfEntry(existingPerson.getDateOfEntry());
-			personBuilder.withCompany(existingPerson.getCompany());
-			personBuilder.withCar(existingPerson.getCar());
-			personBuilder.withPassword(existingPerson.getPassword());
-			personBuilder.withRole(existingPerson.getRole());
+			personBuilder = takeOverCurrentInformation(existingPerson);
 		}
 
 		if (dataMap.get("firstName") != null) {
@@ -296,6 +281,36 @@ public class PersonService {
 		}
 
 		return personBuilder.build();
+	}
+	
+	public Person changePersonsPassword(String eMail, String newPassword) {
+		Person existingPerson = this.personRepo.findByEmail(eMail).orElse(null);
+		PersonBuilder personBuilder = takeOverCurrentInformation(existingPerson);
+		personBuilder.withPassword(newPassword);
+		return personBuilder.build();
+	}
+	
+	private PersonBuilder takeOverCurrentInformation(Person person) {
+		PersonBuilder personBuilder = new PersonBuilder();
+		
+		personBuilder.withId(person.getId());
+		personBuilder.withSalutation(person.getSalutation());
+		personBuilder.withFirstName(person.getFirstName());
+		personBuilder.withSecondName(person.getSecondName());
+		personBuilder.withBirthDate(person.getBirthDate());
+		personBuilder.withAddress(person.getAddress());
+		personBuilder.withHouseNumber(person.getHouseNumber());
+		personBuilder.withAreaCode(person.getAreaCode());
+		personBuilder.withArea(person.getArea());
+		personBuilder.withEmail(person.getEmail());
+		personBuilder.withDeactivated(person.isDeactivated());
+		personBuilder.withDateOfEntry(person.getDateOfEntry());
+		personBuilder.withCompany(person.getCompany());
+		personBuilder.withCar(person.getCar());
+		personBuilder.withPassword(person.getPassword());
+		personBuilder.withRole(person.getRole());
+		
+		return personBuilder;
 	}
 
 	public Map<String, String> createMapping(String firstName, String secondName, String birthDate,

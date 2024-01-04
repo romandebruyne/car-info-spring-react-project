@@ -209,6 +209,18 @@ export async function editPersonData(creds: Credentials, id: string, firstName: 
     return response;
 }
 
+export async function changePersonsPassword(creds: Credentials, email: string, oldPassword: string, newPassword: string,
+    newPasswordValidation: string) {
+        let FINAL_URL = PERSONS_URL + "/changePassword?email=" + email + "&" +
+            "oldPassword=" + oldPassword + "&" +
+            "newPassword=" + newPassword + "&" +
+            "newPasswordValidation=" + newPasswordValidation;
+
+    const response = await axios.put(FINAL_URL,
+        { headers: { 'Authorization': 'Basic ' + encodePassword(creds) } });
+    return response;
+}
+
 export async function createPerson(creds: Credentials, firstName: string, secondName: string, birthDate: string,
     address: string, houseNumber: string, areaCode: string, area: string, email: string, password: string,
     salutation: string, company: string) {

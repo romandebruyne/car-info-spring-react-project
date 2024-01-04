@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Credentials } from "./Credentials";
 import { CarInfoPage } from "./CarInfoPage";
 import { EditPersonDataAsUserPage } from "./EditPersonDataAsUserPage";
+import { ChangePasswordAsUserPage } from "./ChangePasswordAsUserPage";
 import { TopThreePage } from "./TopThreePage";
 
 export type Props = { creds: Credentials; onBack: () => void };
@@ -11,6 +12,7 @@ export function UserPage(props: Props) {
     const [carInfoPageIsOpen, setCarInfoPageIsOpen] = useState(false);
     const [topThreeElementsPageIsOpen, setTopThreeElementsPageIsOpen] = useState(false);
     const [editUserDataPageIsOpen, setEditUserDataPageIsOpen] = useState(false);
+    const [changePasswordPageIsOpen, setChangePasswordPageIsOpen] = useState(false);
     const [credentials, setCredentials] = useState<Credentials>(props.creds);
 
     function handleClickOnCarInfo() {
@@ -28,9 +30,20 @@ export function UserPage(props: Props) {
         setUserPageIsOpen(false);
     }
 
-    function handleSuccesfulEdit(openUserPage: boolean, newEmail: string, newPassword: string) {
+    function handleClickOnChangePassword() {
+        setChangePasswordPageIsOpen(true);
+        setUserPageIsOpen(false);
+    }
+
+    function handleSuccesfulDataEdit(openUserPage: boolean, newEmail: string, newPassword: string) {
         setCredentials({ email: newEmail, password: newPassword })
         setEditUserDataPageIsOpen(false);
+        setUserPageIsOpen(openUserPage);
+    }
+
+    function handleSuccesfulPasswordChange(openUserPage: boolean, newPassword: string) {
+        setCredentials({ email: credentials.email, password: newPassword })
+        setChangePasswordPageIsOpen(false);
         setUserPageIsOpen(openUserPage);
     }
 
@@ -49,22 +62,31 @@ export function UserPage(props: Props) {
         setUserPageIsOpen(true);
     }
 
+    function backFromChangePasswordPage() {
+        setChangePasswordPageIsOpen(false);
+        setUserPageIsOpen(true);
+    }
+
     return (
         <>
-            {userPageIsOpen ?
+            { userPageIsOpen ?
                 <>
                     <h2>Welcome, user {props.creds.email}!</h2>
                     <button onClick={ handleClickOnCarInfo }>Show car information</button>
                     <button onClick={ handleClickOnTopThreeElements }>Show top three elements</button>
-                    <button onClick={handleClickOnEditData}>Edit person data</button>
-                    <button onClick={props.onBack}>Back</button>
-                </> : null}
+                    <button onClick={ handleClickOnEditData }>Edit person data</button>
+                    <button onClick={ handleClickOnChangePassword }>Change password</button>
+                    <button onClick={ props.onBack }>Back</button>
+                </> : null }
 
             { carInfoPageIsOpen ? <CarInfoPage creds={ credentials }
-                onBack={ backFromCarInfoPage } /> : null}
+                onBack={ backFromCarInfoPage } /> : null }
             { topThreeElementsPageIsOpen ? <TopThreePage onBack={ backFromTopThreeElementsPage } /> : null }
-            { editUserDataPageIsOpen ? <EditPersonDataAsUserPage creds={ credentials } onEdit={ handleSuccesfulEdit } 
-                onBack={ backFromEditUserDataPage } /> : null}
+            { editUserDataPageIsOpen ? <EditPersonDataAsUserPage creds={ credentials } onEdit={ handleSuccesfulDataEdit } 
+                onBack={ backFromEditUserDataPage } /> : null }
+            { changePasswordPageIsOpen ? <ChangePasswordAsUserPage creds={ credentials }
+                onChange={ handleSuccesfulPasswordChange }
+                onBack={ backFromChangePasswordPage } /> : null }
         </>
     )
 }

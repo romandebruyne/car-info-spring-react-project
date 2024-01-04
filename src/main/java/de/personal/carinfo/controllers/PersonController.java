@@ -3,6 +3,8 @@ package de.personal.carinfo.controllers;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +20,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.personal.carinfo.objects.Person;
 import de.personal.carinfo.repos.PersonRepository;
+import de.personal.carinfo.services.AuthService;
 import de.personal.carinfo.services.PersonService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 public class PersonController {
-	private BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder(4);
+	private Logger logger = LoggerFactory.getLogger(PersonController.class);
+	private BCryptPasswordEncoder bCryptEncoder = new BCryptPasswordEncoder(4);
 	
 	@Autowired
     private PersonRepository personRepo;
 
     @Autowired
     private PersonService personService;
+    
+    @Autowired
+    private AuthService authService;
     
     @GetMapping("/persons")
     public List<Person> getAllPersons() {
@@ -60,7 +67,7 @@ public class PersonController {
 
 		try {
 			dataMap = this.personService.createMapping(firstName, secondName, birthDate, address, 
-					houseNumber, areaCode, area, email, this.bcryptEncoder.encode(password), salutation, 
+					houseNumber, areaCode, area, email, this.bCryptEncoder.encode(password), salutation, 
 					company);
 			personToCreate = this.personService.createOrEditPerson(dataMap, true);
 			return new ResponseEntity<>(this.personRepo.save(personToCreate), HttpStatus.OK);
@@ -89,7 +96,7 @@ public class PersonController {
         
         try {
             dataMap = this.personService.createMapping(firstName, secondName, birthDate,
-            		address, houseNumber, areaCode, area, email, this.bcryptEncoder.encode(password),
+            		address, houseNumber, areaCode, area, email, this.bCryptEncoder.encode(password),
             		salutation, company);
             personToEdit = this.personService.createOrEditPerson(dataMap, false);
             return new ResponseEntity<>(this.personRepo.save(personToEdit), HttpStatus.OK);
@@ -99,13 +106,35 @@ public class PersonController {
         }
     }
 	
+	@PutMapping("/persons/changePassword")
+    public ResponseEntity<Person> changePassword(
+    		@RequestParam(value = "email", defaultValue = "", required = true) String email,
+    		@RequestParam(value = "oldPassword", defaultValue = "", required = true) String oldPassword,
+            @RequestParam(value = "newPassword", defaultValue = "", required = true) String newPassword,
+            @RequestParam(value = "newPasswordValidation", defaultValue = "", required = true)
+    			String newPasswordValidation) {
+
+		Person personToEdit;
+        
+        if (!this.authService.passwordIsCorrect(email, oldPassword)) {
+        	this.logger.warn("Old password not correct.");
+        	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if (!newPassword.equals(newPasswordValidation)) {
+        	this.logger.warn("New password validation not successful.");
+        	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+        	personToEdit = this.personService.changePersonsPassword(email, this.bCryptEncoder.encode(newPassword));
+        	return new ResponseEntity<>(this.personRepo.save(personToEdit), HttpStatus.OK);
+        }
+    }
+	
     @DeleteMapping("/persons/{email}")
     public ResponseEntity<HttpStatus> deleteByEmail(@PathVariable String email) {
-        Person person = this.personRepo.findByEmail(email).orElse(null);
-        if (person != null) {
-            this.personRepo.delete(person);
+        if (this.personService.personExistsInDatabase(email)) {
+            this.personRepo.delete(this.personRepo.findByEmail(email).get());
             return new ResponseEntity<>(HttpStatus.OK);
-        }
+        } 
+        
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

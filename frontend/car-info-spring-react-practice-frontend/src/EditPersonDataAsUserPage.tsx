@@ -5,7 +5,7 @@ import { Person, getPersonByEmail, editPersonData } from "./api";
 export type Props = {
     creds: Credentials; onEdit: (openUserPage: boolean, newEmail: string, newPassword: string) => void;
     onBack: () => void
-};
+}
 
 export function EditPersonDataAsUserPage(props: Props) {
     const [editUserDataAsUserPageIsOpen, setEditUserDataAsUserPageIsOpen] = useState(true);
@@ -26,7 +26,7 @@ export function EditPersonDataAsUserPage(props: Props) {
 
     useEffect(() => {
         getPersonByEmail(props.creds, props.creds.email).then(body => setCurrentUser(body.data));
-    }, []);
+    }, [])
 
     function handleGetCurrentValues() {
         if (currentUser !== null) {
@@ -56,7 +56,7 @@ export function EditPersonDataAsUserPage(props: Props) {
         setErrorOccurred(true);
     }
 
-    function handleErrorOccurredWarning() {
+    function showErrorOccurredWarning() {
         return (
             <div>
                 <p>Error occurred, try again please!</p>
@@ -109,7 +109,7 @@ export function EditPersonDataAsUserPage(props: Props) {
                     <button onClick={props.onBack}>Back</button>
                 </> : null}
 
-            {errorOccurred ? handleErrorOccurredWarning() : null}
+            {errorOccurred ? showErrorOccurredWarning() : null}
         </>
     )
 }

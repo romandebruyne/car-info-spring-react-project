@@ -52,7 +52,7 @@ export function EditPersonDataAsAdminPage(props: Props) {
         props.onEdit(true);
     }
 
-    function handleErrorOccurredWarning() {
+    function showErrorOccurredWarning() {
         return (
             <div>
                 <p>Error occurred, please try again!</p>
@@ -136,7 +136,7 @@ export function EditPersonDataAsAdminPage(props: Props) {
                 </>
                 : null}
 
-            {errorOccurred ? handleErrorOccurredWarning() : null}
+            {errorOccurred ? showErrorOccurredWarning() : null}
         </>
     )
 }

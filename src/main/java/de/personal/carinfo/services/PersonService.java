@@ -197,6 +197,20 @@ public class PersonService {
 		}
 	}
 	
+	public boolean personExistsInDatabase(String eMail) {
+		return this.personRepo.findByEmail(eMail).orElse(null) == null ? false : true;
+	}
+	
+	public boolean personIsDeactivated(String eMail) {
+		Person person = this.personRepo.findByEmail(eMail).orElse(null);
+		
+		if (person == null || person.isDeactivated()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public Person createOrEditPerson(Map<String, String> dataMap, boolean createPerson) {
 		PersonBuilder personBuilder = new PersonBuilder();
 		Person existingPerson;

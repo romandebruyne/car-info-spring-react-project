@@ -74,7 +74,7 @@ public class CarService {
 			this.logger.info("Car data import successfully finished!");
 			
 		} catch (IOException e) {
-			this.logger.info("Error occurred during car data import!");
+			this.logger.warn("Error occurred during car data import!");
 		}
 	}
 

@@ -61,22 +61,18 @@ public class PersonController {
 			@RequestParam(value = "password", defaultValue = "", required = true) String password,
 			@RequestParam(value = "salutation", defaultValue = "", required = false) String salutation,
 			@RequestParam(value = "company", defaultValue = "", required = false) String company) {
-
-		try {
-			if (!this.authService.isValidPassword(password)) {
-				this.logger.warn("Invalid password, person not created!");
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
 			
-			Map<String, String> dataMap = this.personService.createDataMappingForPersonCreation(firstName,
-					secondName, birthDate, address,  houseNumber, areaCode, area, email,
-					this.bCryptEncoder.encode(password), salutation, company);
-			Person personToCreate = this.personService.createOrEditPerson(dataMap, true);
+		Map<String, String> dataMap = this.personService.createDataMappingForPersonCreation(firstName,
+				secondName, birthDate, address,  houseNumber, areaCode, area, email, password,
+				salutation, company);
+		Person personToCreate = this.personService.createNewPerson(dataMap);
+		
+		if (personToCreate != null) {
 			this.logger.info("Person successfully created!");
 			return new ResponseEntity<>(this.personRepo.save(personToCreate), HttpStatus.OK);
-		} catch (Exception e) {
+		} else {
 			this.logger.warn("Person not created!");
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 	
@@ -95,16 +91,17 @@ public class PersonController {
             @RequestParam(value = "salutation", defaultValue = "", required = false) String salutation,
             @RequestParam(value = "company", defaultValue = "", required = false) String company) {
 
-        try {
-        	Map<String, String> dataMap = this.personService.createDataMappingForPersonDataEdit(firstName,
-        			secondName, birthDate, address, houseNumber, areaCode, area, oldEmail, newEmail, salutation,
-        			company);
-            Person personToEdit = this.personService.createOrEditPerson(dataMap, false);
-            this.logger.info("Person data successfully modified!");
-            return new ResponseEntity<>(this.personRepo.save(personToEdit), HttpStatus.OK);
-        } catch (Exception e) {
+    	Map<String, String> dataMap = this.personService.createDataMappingForPersonDataEdit(firstName,
+    			secondName, birthDate, address, houseNumber, areaCode, area, oldEmail, newEmail, salutation,
+    			company);
+        Person personToEdit = this.personService.editPersonData(dataMap);
+        
+        if (personToEdit != null) {
+        	this.logger.info("Person data successfully modified!");
+        	return new ResponseEntity<>(this.personRepo.save(personToEdit), HttpStatus.OK);
+        } else {
         	this.logger.error("Person data not modified!");
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 	
@@ -119,7 +116,7 @@ public class PersonController {
         if (!this.authService.passwordIsCorrect(email, oldPassword)) {
         	this.logger.warn("Old password not correct.");
         	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if (!this.authService.isValidPassword(newPassword)) {
+        } else if (!this.personService.isValidPassword(newPassword)) {
         	this.logger.warn("New password invalid!");
         	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else if (!newPassword.equals(newPasswordValidation)) {

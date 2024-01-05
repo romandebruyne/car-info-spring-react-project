@@ -1,8 +1,5 @@
 package de.personal.carinfo.services;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,25 +32,4 @@ public class AuthService {
 			return false;
 		}
 	}
-	
-	/**
-	 * Checks password to ensure that it contains one small letter, one capital letter, and one digit. 
-	 * Morever, it ensures that no dollar sign, semicolon or commas are included. Finally, the minimum length
-	 * is set to 4 and the maximum length to 8 characters.
-	 * 
-	 * @param password	the password to check.
-	 * 
-	 * @return true, if valid password.
-	 */
-    public boolean isValidPassword(String password) {
-        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[^\\s$;,]{4,8}$";
-        Pattern p = Pattern.compile(regex);
- 
-        if (password != null) {
-            Matcher m = p.matcher(password);
-            return m.matches();
-        }
-        
-        return false;
-    }
 }

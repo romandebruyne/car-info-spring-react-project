@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +24,7 @@ import de.personal.carinfo.repos.PersonRepository;
 @Service
 public class PersonService {
 	private Logger logger = LoggerFactory.getLogger(CarService.class);
-	private BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder(4);
+	private BCryptPasswordEncoder bCryptEncoder = new BCryptPasswordEncoder(4);
 	
 	@Autowired
 	private PersonRepository personRepo;
@@ -83,7 +85,7 @@ public class PersonService {
 				personBuilder.withCompany(information[13]);
 				
 				personBuilder.withCar(this.carRepo.findById(Long.parseLong(information[14])).orElse(null));
-				personBuilder.withPassword(this.bcryptEncoder.encode(information[15]));
+				personBuilder.withPassword(this.bCryptEncoder.encode(information[15]));
 				personBuilder.withRole(Role.USER);
 
 				this.personRepo.save(personBuilder.build());
@@ -101,7 +103,8 @@ public class PersonService {
 			Person admin = new Person(9999999L, standardizeSalutation(""), "Adam", "Admin",
 					LocalDate.parse("1980-12-31"), "Adminstr.", "1a", "38120", "Braunschweig",
 					"adminno1@fakemail.com", false, LocalDate.parse("2000-01-01"),
-					"NA", this.bcryptEncoder.encode("1234"), Role.ADMIN, this.carRepo.findById(6306L).orElse(null));
+					"NA", this.bCryptEncoder.encode("1234"), Role.ADMIN,
+					this.carRepo.findById(6306L).orElse(null));
 			this.personRepo.save(admin);
 			
 			this.logger.info("Admin successfully created!");
@@ -211,66 +214,96 @@ public class PersonService {
 		}
 	}
 	
-	public Person createOrEditPerson(Map<String, String> dataMap, boolean createPerson) {
+	/**
+	 * Checks password to ensure that it contains one small letter, one capital letter, and one digit. 
+	 * Morever, it ensures that no dollar sign, semicolon or commas are included. Finally, the minimum length
+	 * is set to 4 and the maximum length to 8 characters.
+	 * 
+	 * @param password	the password to check.
+	 * 
+	 * @return true, if valid password.
+	 */
+    public boolean isValidPassword(String password) {
+        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[^\\s$;,]{4,8}$";
+        Pattern p = Pattern.compile(regex);
+ 
+        if (password != null) {
+            Matcher m = p.matcher(password);
+            return m.matches();
+        }
+        
+        return false;
+    }
+	
+	public Person createNewPerson(Map<String, String> dataMap) {
 		PersonBuilder personBuilder = new PersonBuilder();
-		Person existingPerson;
-		long randomId;
 
-		if (createPerson) {
+		long randomId = generateRandomId(7);
+		while (this.personRepo.findById(randomId).orElse(null) != null) {
 			randomId = generateRandomId(7);
-			
-			while (this.personRepo.findById(randomId).orElse(null) != null) {
-				randomId = generateRandomId(7);
-			}
-			
-			personBuilder.withId(randomId);
-			personBuilder.withDateOfEntry(LocalDate.now());
-			personBuilder.withRole(Role.USER);
-			
-			if (dataMap.get("password") != null) {
-				personBuilder.withPassword(dataMap.get("password"));
-			}
-			
-			if (dataMap.get("email") != null) {
-				personBuilder.withEmail(dataMap.get("email"));
-			}
-			
+		}
+		
+		if (!isValidPassword(dataMap.get("password"))) {
+			this.logger.warn("Invalid password.");
+			return null;
 		} else {
-			existingPerson = this.personRepo.findByEmail(dataMap.get("oldEmail")).orElse(null);
-			personBuilder = takeOverCurrentInformation(existingPerson);
+			personBuilder.withPassword(this.bCryptEncoder.encode(dataMap.get("password")));
 		}
 
-		if (dataMap.get("firstName") != null) {
-			personBuilder.withFirstName(dataMap.get("firstName"));
-		}
-
-		if (dataMap.get("secondName") != null) {
-			personBuilder.withSecondName(dataMap.get("secondName"));
-		}
-
-		if (dataMap.get("birthDate") != null) {
+		try {
 			personBuilder.withBirthDate(LocalDate.parse(dataMap.get("birthDate")));
+		} catch (Exception e) {
+			this.logger.warn("Invalid date format.");
+			return null;
+		}
+		
+		personBuilder.withId(randomId);
+		personBuilder.withDateOfEntry(LocalDate.now());
+		personBuilder.withRole(Role.USER);
+		personBuilder.withEmail(dataMap.get("email"));
+		personBuilder.withFirstName(dataMap.get("firstName"));
+		personBuilder.withSecondName(dataMap.get("secondName"));
+		personBuilder.withAddress(dataMap.get("address"));
+		personBuilder.withHouseNumber(dataMap.get("houseNumber"));
+		personBuilder.withAreaCode(dataMap.get("areaCode"));
+		personBuilder.withArea(dataMap.get("area"));
+
+		if (dataMap.get("salutation") != null) {
+			personBuilder.withSalutation(dataMap.get("salutation"));
+		} else {
+			personBuilder.withSalutation("k.A.");
 		}
 
-		if (dataMap.get("address") != null) {
-			personBuilder.withAddress(dataMap.get("address"));
+		if (dataMap.get("company") != null) {
+			personBuilder.withCompany(dataMap.get("company"));
+		} else {
+			personBuilder.withCompany("k.A.");
 		}
 
-		if (dataMap.get("houseNumber") != null) {
-			personBuilder.withHouseNumber(dataMap.get("houseNumber"));
+		return personBuilder.build();
+	}
+	
+	public Person editPersonData(Map<String, String> dataMap) {
+		PersonBuilder personBuilder = new PersonBuilder();
+
+		Person existingPerson = this.personRepo.findByEmail(dataMap.get("oldEmail")).orElse(null);
+		personBuilder = takeOverCurrentInformation(existingPerson);
+		
+		try {
+			personBuilder.withBirthDate(LocalDate.parse(dataMap.get("birthDate")));
+		} catch (Exception e) {
+			this.logger.warn("Invalid date format.");
+			return null;
 		}
 
-		if (dataMap.get("areaCode") != null) {
-			personBuilder.withAreaCode(dataMap.get("areaCode"));
-		}
-
-		if (dataMap.get("area") != null) {
-			personBuilder.withArea(dataMap.get("area"));
-		}
-
-		if (dataMap.get("newEmail") != null) {
-			personBuilder.withEmail(dataMap.get("newEmail"));
-		}
+		personBuilder.withFirstName(dataMap.get("firstName"));
+		personBuilder.withSecondName(dataMap.get("secondName"));
+		personBuilder.withBirthDate(LocalDate.parse(dataMap.get("birthDate")));
+		personBuilder.withAddress(dataMap.get("address"));
+		personBuilder.withHouseNumber(dataMap.get("houseNumber"));
+		personBuilder.withAreaCode(dataMap.get("areaCode"));
+		personBuilder.withArea(dataMap.get("area"));
+		personBuilder.withEmail(dataMap.get("newEmail"));
 
 		if (dataMap.get("salutation") != null) {
 			personBuilder.withSalutation(dataMap.get("salutation"));

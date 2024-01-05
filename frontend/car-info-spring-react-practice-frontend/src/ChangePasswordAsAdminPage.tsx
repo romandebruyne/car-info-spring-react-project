@@ -65,7 +65,7 @@ export function ChangePasswordAsAdminPage(props: Props) {
 
     }
 
-    function showErrorDuringPasswordWarningWarning() {
+    function showErrorDuringPasswordChangeWarning() {
         return (
             <div>
                 <p>Error occurred, try again please!</p>
@@ -146,7 +146,7 @@ export function ChangePasswordAsAdminPage(props: Props) {
                 </> : null }
 
             { errorDuringSearch ? showErrorDuringSearchWarning() : null } 
-            { errorDuringPasswordChange ? showErrorDuringPasswordWarningWarning() : null } 
+            { errorDuringPasswordChange ? showErrorDuringPasswordChangeWarning() : null } 
         </>
     )
 

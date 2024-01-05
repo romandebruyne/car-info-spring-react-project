@@ -127,13 +127,19 @@ public class PersonController {
         }
     }
 	
-    @DeleteMapping("/persons/{email}")
-    public ResponseEntity<HttpStatus> deleteByEmail(@PathVariable String email) {
-        if (this.personService.personExistsInDatabase(email)) {
-            this.personRepo.delete(this.personRepo.findByEmail(email).get());
-            return new ResponseEntity<>(HttpStatus.OK);
-        } 
+    @DeleteMapping("/persons")
+    public ResponseEntity<HttpStatus> deleteByEmail(
+    		@RequestParam(value = "adminEmail", defaultValue = "", required = true) String adminEmail,
+    		@RequestParam(value = "userToDeleteEmail", defaultValue = "", required = true)
+    			String userToDeleteEmail) {
         
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    	if (!adminEmail.equals(userToDeleteEmail)) {
+	    	if (this.personService.personExistsInDatabase(userToDeleteEmail)) {
+	            this.personRepo.delete(this.personRepo.findByEmail(userToDeleteEmail).get());
+	            return new ResponseEntity<>(HttpStatus.OK);
+	        }
+    	}
+        
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

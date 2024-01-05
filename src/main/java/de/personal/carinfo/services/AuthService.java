@@ -20,7 +20,11 @@ public class AuthService {
 	public boolean passwordIsCorrect(String eMail, String password) {
 		Person user = this.personRepo.findByEmail(eMail).orElse(null);
 		
-		if (user != null && this.bCryptEncoder.matches(password, user.getPassword())) {
+		if (user != null && password.charAt(0) != '$'
+				&& this.bCryptEncoder.matches(password, user.getPassword())) {
+			this.logger.info("Password is correct.");
+			return true;
+		} else if (user != null && password.equals(user.getPassword())) {
 			this.logger.info("Password is correct.");
 			return true;
 		} else {

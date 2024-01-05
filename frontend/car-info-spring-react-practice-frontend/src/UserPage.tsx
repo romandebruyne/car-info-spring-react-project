@@ -8,12 +8,12 @@ import { TopThreePage } from "./TopThreePage";
 export type Props = { creds: Credentials; onBack: () => void };
 
 export function UserPage(props: Props) {
+    const [credentials, setCredentials] = useState<Credentials>(props.creds);
     const [userPageIsOpen, setUserPageIsOpen] = useState(true);
     const [carInfoPageIsOpen, setCarInfoPageIsOpen] = useState(false);
     const [topThreeElementsPageIsOpen, setTopThreeElementsPageIsOpen] = useState(false);
     const [editUserDataPageIsOpen, setEditUserDataPageIsOpen] = useState(false);
     const [changePasswordPageIsOpen, setChangePasswordPageIsOpen] = useState(false);
-    const [credentials, setCredentials] = useState<Credentials>(props.creds);
 
     function handleClickOnCarInfo() {
         setCarInfoPageIsOpen(true);
@@ -36,13 +36,13 @@ export function UserPage(props: Props) {
     }
 
     function handleSuccesfulDataEdit(openUserPage: boolean, newEmail: string) {
-        setCredentials({ email: newEmail, password: credentials.password })
+        setCredentials({ email: newEmail, password: credentials.password });
         setEditUserDataPageIsOpen(false);
         setUserPageIsOpen(openUserPage);
     }
 
     function handleSuccesfulPasswordChange(openUserPage: boolean, newPassword: string) {
-        setCredentials({ email: credentials.email, password: newPassword })
+        setCredentials({ email: credentials.email, password: newPassword });
         setChangePasswordPageIsOpen(false);
         setUserPageIsOpen(openUserPage);
     }
@@ -71,7 +71,7 @@ export function UserPage(props: Props) {
         <>
             { userPageIsOpen ?
                 <>
-                    <h2>Welcome, user {props.creds.email}!</h2>
+                    <h2>Welcome, user '{props.creds.email}'!</h2>
                     <button onClick={ handleClickOnCarInfo }>Show car information</button>
                     <button onClick={ handleClickOnTopThreeElements }>Show top three elements</button>
                     <button onClick={ handleClickOnEditData }>Edit person data</button>

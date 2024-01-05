@@ -16,7 +16,7 @@ export type Car = {
 export type Person = {
     id: number, salutation: string, firstName: string, secondName: string, birthDate: string,
     address: string, houseNumber: string, areaCode: string, area: string, email: string, deactivated: boolean,
-    dateOfEntry: number, company: string, password: string, car: Car
+    dateOfEntry: number, company: string, password: string, car: Car, role: string
 }
 
 export type TopThreeElement = { id: string, feature: string, name: string, count: number };

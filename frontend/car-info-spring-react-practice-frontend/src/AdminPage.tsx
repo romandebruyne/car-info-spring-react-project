@@ -5,28 +5,35 @@ import { Credentials } from "./Credentials";
 import { EditPersonDataAsAdminPage } from "./EditPersonDataAsAdminPage";
 import { CreatePersonPage } from "./CreatePersonPage";
 import { DeletePersonPage } from "./DeletePersonPage";
+import { ChangePasswordAsAdminPage } from "./ChangePasswordAsAdminPage";
 
 export type Props = { onBack: () => void; creds: Credentials };
 
 export function AdminPage(props: Props) {
+    const [credentials, setCredentials] = useState<Credentials>(props.creds);
     const [adminPageIsOpen, setAdminPageIsOpen] = useState(true);
-    const [editUserDataAsAdminPageIsOpen, setEditUserDataAsAdminPageIsOpen] = useState(false);
     const [createUserPageIsOpen, setCreateUserPageIsOpen] = useState(false);
+    const [editUserDataAsAdminPageIsOpen, setEditUserDataAsAdminPageIsOpen] = useState(false);
+    const [changePasswordPageIsOpen, setChangePasswordPageIsOpen] = useState(false);
     const [deleteUserPageIsOpen, setDeleteUserPageIsOpen] = useState(false);
-    const [updateTable, setUpdateTable] = useState(false);
     const [persons, setPersons] = useState<null | Person[]>(null)
 
     useEffect(() => {
         getAllPersons(props.creds).then(body => setPersons(body.data));
-    }, [updateTable])
-
-    function handleClickOnEditData() {
-        setEditUserDataAsAdminPageIsOpen(true);
-        setAdminPageIsOpen(false);
-    }
+    }, [])
 
     function handleClickOnCreateUser() {
         setCreateUserPageIsOpen(true);
+        setAdminPageIsOpen(false);
+    }
+
+    function handleClickOnChangePassword() {
+        setChangePasswordPageIsOpen(true);
+        setAdminPageIsOpen(false);
+    }
+
+    function handleClickOnEditData() {
+        setEditUserDataAsAdminPageIsOpen(true);
         setAdminPageIsOpen(false);
     }
 
@@ -35,13 +42,18 @@ export function AdminPage(props: Props) {
         setAdminPageIsOpen(false);
     }
 
+    function backFromCreateUserPage() {
+        setCreateUserPageIsOpen(false);
+        setAdminPageIsOpen(true);
+    }
+
     function backFromEditUserDataByAdminPage() {
         setEditUserDataAsAdminPageIsOpen(false);
         setAdminPageIsOpen(true);
     }
 
-    function backFromCreateUserPage() {
-        setCreateUserPageIsOpen(false);
+    function backFromChangePasswordPage() {
+        setChangePasswordPageIsOpen(false);
         setAdminPageIsOpen(true);
     }
 
@@ -50,22 +62,32 @@ export function AdminPage(props: Props) {
         setAdminPageIsOpen(true);
     }
 
-    function handleSuccesfulEdit(openAdminPage: boolean) {
-        setEditUserDataAsAdminPageIsOpen(false);
-        setAdminPageIsOpen(openAdminPage);
-        setUpdateTable(!updateTable);
-    }
-
     function handleSuccesfulCreation(openAdminPage: boolean) {
         setCreateUserPageIsOpen(false);
         setAdminPageIsOpen(openAdminPage);
-        setUpdateTable(!updateTable);
+    }
+
+    function handleSuccesfulDataEdit(openAdminPage: boolean, oldEmail: string, newEmail: string) {
+        if (oldEmail === credentials.email) {
+            setCredentials({ email: newEmail, password: credentials.password })
+        }
+
+        setEditUserDataAsAdminPageIsOpen(false);
+        setAdminPageIsOpen(openAdminPage);
+    }
+
+    function handleSuccesfulPasswordChange(openAdminPage: boolean, emailOfEditedUser: string, newPassword: string) {
+        if (emailOfEditedUser === credentials.email) {
+            setCredentials({ email: emailOfEditedUser, password: newPassword })
+        }
+
+        setChangePasswordPageIsOpen(false);
+        setAdminPageIsOpen(openAdminPage);
     }
 
     function handleSuccesfulDeletion(openAdminPage: boolean) {
         setDeleteUserPageIsOpen(false);
         setAdminPageIsOpen(openAdminPage);
-        setUpdateTable(!updateTable);
     }
 
     const tableColumns: GridColDef[] = [
@@ -91,11 +113,12 @@ export function AdminPage(props: Props) {
         <>
             {adminPageIsOpen ?
                 <>
-                    <h2>Welcome, admin {props.creds.email}!</h2>
-                    <button onClick={handleClickOnEditData}>Edit person data</button>
-                    <button onClick={handleClickOnCreateUser}>Create new person</button>
-                    <button onClick={handleClickOnDeleteUser}>Delete existing person</button>
-                    <button onClick={props.onBack}>Back</button><br /><br />
+                    <h2>Welcome, admin '{ credentials.email }'!</h2>
+                    <button onClick={ handleClickOnCreateUser }>Create new person</button>
+                    <button onClick={ handleClickOnEditData }>Edit person data</button>
+                    <button onClick={ handleClickOnChangePassword }>Change password</button>
+                    <button onClick={ handleClickOnDeleteUser }>Delete existing person</button>
+                    <button onClick={ props.onBack }>Back</button><br /><br />
 
                     <div>
                         {persons !== null ?
@@ -109,13 +132,14 @@ export function AdminPage(props: Props) {
                     </div>
                 </> : null}
 
-            {editUserDataAsAdminPageIsOpen ? <EditPersonDataAsAdminPage creds={props.creds}
-                onEdit={handleSuccesfulEdit} onBack={backFromEditUserDataByAdminPage} /> : null}
-            {createUserPageIsOpen ? <CreatePersonPage creds={props.creds}
-                onCreation={handleSuccesfulCreation} onBack={backFromCreateUserPage} /> : null}
-            {deleteUserPageIsOpen ? <DeletePersonPage creds={props.creds}
-                onDelete={handleSuccesfulDeletion} onBack={backFromDeletePage} /> : null}
+            { createUserPageIsOpen ? <CreatePersonPage creds={ credentials }
+                onCreation={ handleSuccesfulCreation } onBack={ backFromCreateUserPage } /> : null }
+            { editUserDataAsAdminPageIsOpen ? <EditPersonDataAsAdminPage creds={ credentials }
+                onEdit={ handleSuccesfulDataEdit } onBack={ backFromEditUserDataByAdminPage } /> : null }
+            { changePasswordPageIsOpen ? <ChangePasswordAsAdminPage creds={credentials }
+                onChange={ handleSuccesfulPasswordChange } onBack={ backFromChangePasswordPage } /> : null }
+            { deleteUserPageIsOpen ? <DeletePersonPage creds={ credentials }
+                onDelete={ handleSuccesfulDeletion } onBack={ backFromDeletePage } /> : null }
         </>
     )
-
 }

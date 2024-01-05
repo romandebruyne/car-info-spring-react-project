@@ -95,7 +95,6 @@ public class PersonController {
         Person personToEdit;
         
         try {
-        	this.logger.info("HERE");
             dataMap = this.personService.createDataMappingForPersonDataEdit(firstName, secondName, birthDate,
             		address, houseNumber, areaCode, area, oldEmail, newEmail, salutation, company);
             personToEdit = this.personService.createOrEditPerson(dataMap, false);

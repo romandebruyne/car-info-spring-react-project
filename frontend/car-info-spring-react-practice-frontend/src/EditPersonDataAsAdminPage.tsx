@@ -2,7 +2,8 @@ import { useState } from "react";
 import { getPersonByEmail, editPersonData } from "./api";
 import { Credentials } from "./Credentials";
 
-export type Props = { creds: Credentials; onEdit: (openAdminPage: boolean) => void; onBack: () => void };
+export type Props = { creds: Credentials; onEdit: (openAdminPage: boolean, oldEmail: string, newEmail: string) => void;
+    onBack: () => void };
 
 export function EditPersonDataAsAdminPage(props: Props) {
     const [searchPartIsOpen, setSearchPartIsOpen] = useState(true);
@@ -49,7 +50,7 @@ export function EditPersonDataAsAdminPage(props: Props) {
     function handleUserDataEdit() {
         editPersonData(props.creds, id, firstName, secondName, birthDate, address, houseNumber, areaCode, area,
             oldEmail, newEmail, salutation, company).catch(handleErrorOccurred);
-        props.onEdit(true);
+        props.onEdit(true, oldEmail, newEmail);
     }
 
     function showErrorOccurredWarning() {
@@ -86,7 +87,7 @@ export function EditPersonDataAsAdminPage(props: Props) {
                     <h2>Edit person data</h2>
                     <p>Please choose person by entering his/her mail:</p>
                     <input type="text" placeholder="Mail" value={ emailEnteredByAdmin }
-                        onChange={(event) => setEmailEnteredByAdmin(event.target.value)} />
+                        onChange={ (event) => setEmailEnteredByAdmin(event.target.value) } />
                     <button
                         disabled={ emailEnteredByAdmin === "" }
                         onClick={ handleClickOnSearchUser }
@@ -97,7 +98,7 @@ export function EditPersonDataAsAdminPage(props: Props) {
 
                 </> : null}
 
-            {enteringDataPartIsOpen ?
+            { enteringDataPartIsOpen ?
                 <>
                     <h2>Edit person data</h2>
                     <p>Mandatory fields</p>

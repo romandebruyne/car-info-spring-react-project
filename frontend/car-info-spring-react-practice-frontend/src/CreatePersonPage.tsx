@@ -23,7 +23,7 @@ export function CreatePersonPage(props: Props) {
     async function handleUserCreation() {
         try {
             await createPerson(props.creds, firstName, secondName, birthDate, address, houseNumber, areaCode, area,
-                email, password, salutation, company).catch(handleErrorOccurred);
+                email, password, salutation, company);
             props.onCreation(true);
         } catch {
             handleErrorOccurred();

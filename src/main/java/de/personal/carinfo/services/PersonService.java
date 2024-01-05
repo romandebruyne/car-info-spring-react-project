@@ -92,7 +92,7 @@ public class PersonService {
 			this.logger.info("Person data import successfully finished!");
 				
 		} catch (IOException e) {
-			this.logger.warn("Error occurred during person data import!");
+			this.logger.error("Error occurred during person data import!");
 		}
 	}
 	
@@ -106,7 +106,7 @@ public class PersonService {
 			
 			this.logger.info("Admin successfully created!");
 		} catch (Exception e) {
-			this.logger.warn("Error occurred during admin creation!");
+			this.logger.error("Error occurred during admin creation!");
 		}
 	}
 	

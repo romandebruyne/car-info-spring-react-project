@@ -22,13 +22,13 @@ public class AuthService {
 		
 		if (user != null && password.charAt(0) != '$'
 				&& this.bCryptEncoder.matches(password, user.getPassword())) {
-			this.logger.info("Password is correct.");
+			this.logger.info("Password correct.");
 			return true;
 		} else if (user != null && password.equals(user.getPassword())) {
-			this.logger.info("Password is correct.");
+			this.logger.info("Password correct.");
 			return true;
 		} else {
-			this.logger.info("Password is not correct.");
+			this.logger.info("Password not correct.");
 			return false;
 		}
 	}

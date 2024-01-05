@@ -70,14 +70,16 @@ public class PersonController {
 					address,  houseNumber, areaCode, area, email, this.bCryptEncoder.encode(password),
 					salutation, company);
 			personToCreate = this.personService.createOrEditPerson(dataMap, true);
+			this.logger.info("Person successfully created!");
 			return new ResponseEntity<>(this.personRepo.save(personToCreate), HttpStatus.OK);
 		} catch (Exception e) {
+			this.logger.error("Person not created!");
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
 	@PutMapping("/persons")
-    public ResponseEntity<Person> editPerson(
+    public ResponseEntity<Person> editPersonData(
     		@RequestParam(value = "id", defaultValue = "", required = false) String id,
             @RequestParam(value = "firstName", defaultValue = "", required = true) String firstName,
             @RequestParam(value = "secondName", defaultValue = "", required = true) String secondName,
@@ -98,9 +100,10 @@ public class PersonController {
             dataMap = this.personService.createDataMappingForPersonDataEdit(firstName, secondName, birthDate,
             		address, houseNumber, areaCode, area, oldEmail, newEmail, salutation, company);
             personToEdit = this.personService.createOrEditPerson(dataMap, false);
+            this.logger.info("Person data successfully modified!");
             return new ResponseEntity<>(this.personRepo.save(personToEdit), HttpStatus.OK);
-            
         } catch (Exception e) {
+        	this.logger.error("Person data not modified!");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -123,6 +126,7 @@ public class PersonController {
         	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
         	personToEdit = this.personService.changePersonsPassword(email, this.bCryptEncoder.encode(newPassword));
+        	this.logger.info("Password successfully changed!");
         	return new ResponseEntity<>(this.personRepo.save(personToEdit), HttpStatus.OK);
         }
     }
@@ -136,10 +140,12 @@ public class PersonController {
     	if (!adminEmail.equals(userToDeleteEmail)) {
 	    	if (this.personService.personExistsInDatabase(userToDeleteEmail)) {
 	            this.personRepo.delete(this.personRepo.findByEmail(userToDeleteEmail).get());
+	            this.logger.info("Deletion successfully modified!");
 	            return new ResponseEntity<>(HttpStatus.OK);
 	        }
     	}
         
+    	this.logger.warn("Deletion not successful!");
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

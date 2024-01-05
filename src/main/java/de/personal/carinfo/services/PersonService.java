@@ -231,6 +231,10 @@ public class PersonService {
 				personBuilder.withPassword(dataMap.get("password"));
 			}
 			
+			if (dataMap.get("email") != null) {
+				personBuilder.withEmail(dataMap.get("email"));
+			}
+			
 		} else {
 			existingPerson = this.personRepo.findByEmail(dataMap.get("oldEmail")).orElse(null);
 			personBuilder = takeOverCurrentInformation(existingPerson);

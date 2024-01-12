@@ -6,10 +6,12 @@ import { StartPage } from './StartPage';
 import { LoginPage } from './LoginPage';
 import { UserPage } from './UserPage';
 import { AdminPage } from './AdminPage';
+import { CreatePersonPage } from './CreatePersonPage';
 
 function App() {
   const [startPageIsOpen, setStartPageIsOpen] = useState(true);
   const [loginPageIsOpen, setLoginPageIsOpen] = useState(false);
+  const [registrationPageIsOpen, setRegistrationPageIsOpen] = useState(false);
   const [credentials, setCredentials] = useState<null | Credentials>(null)
   const [wrongCredentialsWarningIsOpen, setWrongCredentialsWarningIsOpen] = useState(false);
   const [accountIsDeactivatedWarningIsOpen, setAccountIsDeactivatedWarningIsOpen] = useState(false);
@@ -19,6 +21,12 @@ function App() {
   function handleClickOnLogin() {
     setStartPageIsOpen(false);
     setLoginPageIsOpen(true);
+  }
+
+  function handleClickOnRegister() {
+    setCredentials({ email: 'userwantstoregister@norealmail.none', password: 'zoA1' })
+    setStartPageIsOpen(false);
+    setRegistrationPageIsOpen(true);
   }
 
   function handleLogin(creds: Credentials, role: string) {
@@ -39,6 +47,15 @@ function App() {
     }
   }
 
+  function handleRegistration() {
+    showSuccessfulRegistrationInformation;
+    setRegistrationPageIsOpen(false);
+  }
+
+  function handleClickOnContinueToUserPage() {
+    setUserPageIsOpen(true);
+  }
+
   function showUnauthorizedLoginWarning() {
     return (
       <div>
@@ -53,6 +70,15 @@ function App() {
       <div>
         <p>Account is deactivated, please contact the administrator!</p>
         <button onClick={ backFromUnauthorizedLogin }>Back to login</button>
+      </div>
+    )
+  }
+
+  function showSuccessfulRegistrationInformation() {
+    return (
+      <div>
+        <p>Registration was successful!</p>
+        <button onClick={ handleClickOnContinueToUserPage }>Continue</button>
       </div>
     )
   }
@@ -72,6 +98,11 @@ function App() {
     setStartPageIsOpen(true);
   }
 
+  function backFromRegistration() {
+    setRegistrationPageIsOpen(false);
+    setStartPageIsOpen(true);
+  }
+
   function backFromUserPage() {
     setUserPageIsOpen(false);
     setLoginPageIsOpen(true);
@@ -84,15 +115,19 @@ function App() {
 
   return(
     <>
-      { /* Start Page */}
-      { startPageIsOpen ? <StartPage onLogin={ handleClickOnLogin } /> : null }
+      { /* Start Page */ }
+      { startPageIsOpen ? <StartPage onLogin={ handleClickOnLogin } onRegister={ handleClickOnRegister } /> : null }
 
-      { /* Login Page */}
+      { /* Login Page */ }
       { loginPageIsOpen ? <LoginPage onSubmit={ handleLogin } onBack={ backFromLogin } /> : null }
       { wrongCredentialsWarningIsOpen ? showUnauthorizedLoginWarning() : null }
       { accountIsDeactivatedWarningIsOpen ? showAccountIsDeactivatedWarning() : null }
 
-      { /* User or Admin Page */}
+      { /* Registration Page */ }
+      { registrationPageIsOpen && credentials !== null? <CreatePersonPage creds={ credentials }
+        onCreation={ handleRegistration } onBack={ backFromRegistration } /> : null } 
+
+      { /* User or Admin Page */ }
       { userPageIsOpen && credentials !== null ? <UserPage creds={ credentials } onBack={ backFromUserPage } /> : null }
       { adminPageIsOpen && credentials !== null ? <AdminPage creds={ credentials } onBack={ backFromAdminPage } /> : null }
     </>

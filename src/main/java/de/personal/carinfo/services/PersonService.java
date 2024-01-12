@@ -237,6 +237,11 @@ public class PersonService {
 	
 	public Person createNewPerson(Map<String, String> dataMap) {
 		PersonBuilder personBuilder = new PersonBuilder();
+		
+		if (personExistsInDatabase(dataMap.get("email"))) {
+			this.logger.warn("Mail is already in use.");
+			return null;
+		}
 
 		long randomId = generateRandomId(7);
 		while (this.personRepo.findById(randomId).orElse(null) != null) {

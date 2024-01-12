@@ -1,6 +1,6 @@
 import './App.css'
 
-type Props = { onLogin: () => void };
+type Props = { onLogin: () => void; onRegister: () => void };
 
 export function StartPage(props: Props) {
     return (
@@ -10,9 +10,12 @@ export function StartPage(props: Props) {
                 <button onClick={ props.onLogin }>
                     Login
                 </button><br /><br />
+                <button onClick={ props.onRegister }>
+                    Register
+                </button><br /><br />
             </div>
             <p className="press">
-                Click button to continue.
+                Continue via click on button.
             </p>
         </>
     )

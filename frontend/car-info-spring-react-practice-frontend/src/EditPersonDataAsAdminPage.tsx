@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getPersonByEmail, editPersonData } from "./api";
 import { Credentials } from "./Credentials";
 
-export type Props = { creds: Credentials; onEdit: (openAdminPage: boolean, oldEmail: string, newEmail: string) => void;
+type Props = { creds: Credentials; onEdit: (openAdminPage: boolean, oldEmail: string, newEmail: string) => void;
     onBack: () => void };
 
 export function EditPersonDataAsAdminPage(props: Props) {
@@ -82,7 +82,7 @@ export function EditPersonDataAsAdminPage(props: Props) {
 
     return (
         <>
-            {searchPartIsOpen ?
+            { searchPartIsOpen ?
                 <>
                     <h2>Edit person data</h2>
                     <p>Please choose person by entering his/her mail:</p>
@@ -96,7 +96,8 @@ export function EditPersonDataAsAdminPage(props: Props) {
 
                     <button onClick={ props.onBack }>Back</button>
 
-                </> : null}
+                </> : null
+            }
 
             { enteringDataPartIsOpen ?
                 <>
@@ -133,7 +134,8 @@ export function EditPersonDataAsAdminPage(props: Props) {
                     </button>
                     <button onClick={ backFromEnteringData }>Back</button>
                 </>
-                : null }
+                : null
+            }
 
             { errorOccurred ? showErrorOccurredWarning() : null }
         </>

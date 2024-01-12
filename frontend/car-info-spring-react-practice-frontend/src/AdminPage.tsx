@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { Person, getAllPersons } from "./api";
 import { Credentials } from "./Credentials";
@@ -6,8 +6,9 @@ import { EditPersonDataAsAdminPage } from "./EditPersonDataAsAdminPage";
 import { CreatePersonPage } from "./CreatePersonPage";
 import { DeletePersonPage } from "./DeletePersonPage";
 import { ChangePasswordAsAdminPage } from "./ChangePasswordAsAdminPage";
+import { PersonDataPage } from "./PersonDataPage";
 
-export type Props = { onBack: () => void; creds: Credentials };
+type Props = { creds: Credentials; onBack: () => void };
 
 export function AdminPage(props: Props) {
     const [credentials, setCredentials] = useState<Credentials>(props.creds);
@@ -16,11 +17,17 @@ export function AdminPage(props: Props) {
     const [editUserDataAsAdminPageIsOpen, setEditUserDataAsAdminPageIsOpen] = useState(false);
     const [changePasswordPageIsOpen, setChangePasswordPageIsOpen] = useState(false);
     const [deleteUserPageIsOpen, setDeleteUserPageIsOpen] = useState(false);
-    const [persons, setPersons] = useState<null | Person[]>(null)
+    const [persons, setPersons] = useState<null | Person[]>(null);
+    const [emailOfPersonClickedByAdmin, setEmailOfPersonClickedByAdmin] = useState("");
 
     useEffect(() => {
         getAllPersons(props.creds).then(body => setPersons(body.data));
     }, [])
+
+    function handleClickOnRow(params: GridRowParams) {
+        setAdminPageIsOpen(false);
+        setEmailOfPersonClickedByAdmin(params.row.email);
+    }
 
     function handleClickOnCreateUser() {
         setCreateUserPageIsOpen(true);
@@ -90,6 +97,11 @@ export function AdminPage(props: Props) {
         setAdminPageIsOpen(openAdminPage);
     }
 
+    function backFromPersonDataPage() {
+        setEmailOfPersonClickedByAdmin("");
+        setAdminPageIsOpen(true);
+    }
+
     const tableColumns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 80 },
         { field: 'salutation', headerName: 'Sal.', width: 60 },
@@ -111,7 +123,7 @@ export function AdminPage(props: Props) {
 
     return (
         <>
-            {adminPageIsOpen ?
+            { adminPageIsOpen ?
                 <>
                     <h2>Welcome, admin '{ credentials.email }'!</h2>
                     <button onClick={ handleClickOnCreateUser }>Create new person</button>
@@ -121,22 +133,26 @@ export function AdminPage(props: Props) {
                     <button onClick={ props.onBack }>Back</button><br /><br />
 
                     <div>
-                        {persons !== null ?
+                        { persons !== null ?
                             <div className="whitetable">
                                 <DataGrid
-                                    rows={persons}
-                                    columns={tableColumns}
+                                    onRowClick={ handleClickOnRow }
+                                    rows={ persons }
+                                    columns={ tableColumns }
                                     initialState={ { pagination: { paginationModel: { page: 0, pageSize: 50 }, }, } }
                                     pageSizeOptions={ [50] } />
-                            </div> : null}
+                            </div> : null }
                     </div>
-                </> : null}
+                </> : null
+            }
 
+            { emailOfPersonClickedByAdmin !== "" ? <PersonDataPage creds={ credentials } emailOfPerson={ emailOfPersonClickedByAdmin }
+                onBack={ backFromPersonDataPage } /> : null }
             { createUserPageIsOpen ? <CreatePersonPage creds={ credentials }
                 onCreation={ handleSuccesfulCreation } onBack={ backFromCreateUserPage } /> : null }
             { editUserDataAsAdminPageIsOpen ? <EditPersonDataAsAdminPage creds={ credentials }
                 onEdit={ handleSuccesfulDataEdit } onBack={ backFromEditUserDataByAdminPage } /> : null }
-            { changePasswordPageIsOpen ? <ChangePasswordAsAdminPage creds={credentials }
+            { changePasswordPageIsOpen ? <ChangePasswordAsAdminPage creds={ credentials }
                 onChange={ handleSuccesfulPasswordChange } onBack={ backFromChangePasswordPage } /> : null }
             { deleteUserPageIsOpen ? <DeletePersonPage creds={ credentials }
                 onDelete={ handleSuccesfulDeletion } onBack={ backFromDeletePage } /> : null }

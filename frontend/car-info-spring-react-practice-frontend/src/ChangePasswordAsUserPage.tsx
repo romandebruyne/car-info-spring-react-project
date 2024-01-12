@@ -2,9 +2,7 @@ import { useState } from "react";
 import { Credentials } from "./Credentials";
 import { changePersonsPassword } from "./api";
 
-export type Props = {
-    creds: Credentials; onChange: (openUserPage: boolean, newPassword: string) => void; onBack: () => void
-}
+type Props = { creds: Credentials; onChange: (openUserPage: boolean, newPassword: string) => void; onBack: () => void };
 
 export function ChangePasswordAsUserPage(props: Props) {
     const [changePasswordAsUserPageIsOpen, setChangePasswordAsUserPageIsOpen] = useState(true);

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getPersonByEmail, deletePerson } from "./api";
 import { Credentials } from "./Credentials";
 
-export type Props = { creds: Credentials; onDelete: (openAdminPage: boolean) => void; onBack: () => void };
+type Props = { creds: Credentials; onDelete: (openAdminPage: boolean) => void; onBack: () => void };
 
 export function DeletePersonPage(props: Props) {
     const [searchUserPageIsOpen, setSearchUserPageIsOpen] = useState(true);

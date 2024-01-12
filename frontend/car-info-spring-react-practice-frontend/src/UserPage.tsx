@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Credentials } from "./Credentials";
-import { CarInfoPage } from "./CarInfoPage";
+import { FullTextCarSearchPage } from "./FullTextCarSearchPage";
 import { EditPersonDataAsUserPage } from "./EditPersonDataAsUserPage";
 import { ChangePasswordAsUserPage } from "./ChangePasswordAsUserPage";
 import { TopThreePage } from "./TopThreePage";
 
-export type Props = { creds: Credentials; onBack: () => void };
+type Props = { creds: Credentials; onBack: () => void };
 
 export function UserPage(props: Props) {
     const [credentials, setCredentials] = useState<Credentials>(props.creds);
@@ -79,7 +79,7 @@ export function UserPage(props: Props) {
                     <button onClick={ props.onBack }>Back</button>
                 </> : null }
 
-            { carInfoPageIsOpen ? <CarInfoPage creds={ credentials }
+            { carInfoPageIsOpen ? <FullTextCarSearchPage creds={ credentials }
                 onBack={ backFromCarInfoPage } /> : null }
             { topThreeElementsPageIsOpen ? <TopThreePage onBack={ backFromTopThreeElementsPage } /> : null }
             { editUserDataPageIsOpen ? <EditPersonDataAsUserPage creds={ credentials } onEdit={ handleSuccesfulDataEdit } 

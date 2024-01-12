@@ -4,7 +4,7 @@ import { TopThreeElement, getTopThreeElementsByFeature } from "./api";
 import { FeatureSelectionPage } from "./FeatureSelectionPage";
 import './TopThreePage.css'
 
-export type Props = { onBack: () => void };
+type Props = { onBack: () => void };
 
 export function TopThreePage(props: Props) {
     const [topThreePageIsOpen, setTopThreePageIsOpen] = useState(true);

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Credentials } from "./Credentials";
 import { createPerson } from "./api";
 
-export type Props = { creds: Credentials; onCreation: (openAdminPage: boolean) => void; onBack: () => void };
+type Props = { creds: Credentials; onCreation: (openAdminPage: boolean) => void; onBack: () => void };
 
 export function CreatePersonPage(props: Props) {
     const [createPageIsOpen, setCreateUserPageIsOpen] = useState(true);

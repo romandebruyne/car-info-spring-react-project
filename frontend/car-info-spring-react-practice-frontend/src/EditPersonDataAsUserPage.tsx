@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 import { Credentials } from "./Credentials";
 import { Person, getPersonByEmail, editPersonData } from "./api";
 
-export type Props = {
-    creds: Credentials; onEdit: (openUserPage: boolean, newEmail: string) => void;
-    onBack: () => void
-}
+type Props = { creds: Credentials; onEdit: (openUserPage: boolean, newEmail: string) => void; onBack: () => void };
 
 export function EditPersonDataAsUserPage(props: Props) {
     const [editUserDataAsUserPageIsOpen, setEditUserDataAsUserPageIsOpen] = useState(true);

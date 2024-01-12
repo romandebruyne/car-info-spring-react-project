@@ -2,10 +2,8 @@ import { useState } from "react";
 import { Credentials } from "./Credentials";
 import { changePersonsPassword, getPersonByEmail } from "./api";
 
-export type Props = {
-    creds: Credentials; onChange: (openUserPage: boolean, emailOfEditedUser: string, newPassword: string) => void;
-        onBack: () => void
-}
+type Props = { creds: Credentials; onChange: (openUserPage: boolean, emailOfEditedUser: string, newPassword: string) => void;
+    onBack: () => void };
 
 export function ChangePasswordAsAdminPage(props: Props) {
     const [searchUserPageIsOpen, setSearchUserPageIsOpen] = useState(true);

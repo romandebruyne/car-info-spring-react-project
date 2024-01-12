@@ -16,13 +16,21 @@ export type Car = {
 export type Person = {
     id: number, salutation: string, firstName: string, secondName: string, birthDate: string,
     address: string, houseNumber: string, areaCode: string, area: string, email: string, deactivated: boolean,
-    dateOfEntry: number, company: string, password: string, car: Car, role: string
+    dateOfEntry: string, company: string, password: string, car: Car, role: string
 }
 
 export type TopThreeElement = { id: string, feature: string, name: string, count: number };
 
 export async function login(email: string, password: string) {
     const response = await axios.post(LOGIN_URL, { email: email, password: password });
+    return response;
+}
+
+export async function getCarById(creds: Credentials, id: number) {
+    let FINAL_URL = CARS_URL + "/" + id;
+
+    const response = await axios.get<Car>(FINAL_URL,
+        { headers: { 'Authorization': 'Basic ' + encodePassword(creds) } });
     return response;
 }
 

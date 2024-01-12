@@ -2,7 +2,7 @@ import { useState } from "react"
 import { login } from "./api";
 import { Credentials } from "./Credentials";
 
-export type Props = { onSubmit: (creds: Credentials, role: string) => void, onBack: () => void };
+type Props = { onSubmit: (creds: Credentials, role: string) => void, onBack: () => void };
 
 export function LoginPage(props: Props) {
     const [email, setEmail] = useState("");

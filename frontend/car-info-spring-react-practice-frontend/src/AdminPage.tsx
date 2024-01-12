@@ -126,8 +126,8 @@ export function AdminPage(props: Props) {
                                 <DataGrid
                                     rows={persons}
                                     columns={tableColumns}
-                                    initialState={{ pagination: { paginationModel: { page: 0, pageSize: 50 }, }, }}
-                                    pageSizeOptions={[50]} />
+                                    initialState={ { pagination: { paginationModel: { page: 0, pageSize: 50 }, }, } }
+                                    pageSizeOptions={ [50] } />
                             </div> : null}
                     </div>
                 </> : null}

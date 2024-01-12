@@ -72,32 +72,32 @@ export function EditPersonDataAsUserPage(props: Props) {
 
     return (
         <>
-            {editUserDataAsUserPageIsOpen ?
+            { editUserDataAsUserPageIsOpen ?
                 <>
                     <h2>Edit person data</h2>
                     <p>Mandatory fields</p>
-                    <input type="text" placeholder="First name" value={firstName}
-                        onChange={event => setFirstName(event.target.value)} /><br />
-                    <input type="text" placeholder="Second name" value={secondName}
-                        onChange={event => setSecondName(event.target.value)} /><br />
-                    <input type="text" placeholder="Birth date (YYYY-MM-DD)" value={birthDate}
-                        onChange={event => setBirthDate(event.target.value)} /><br />
-                    <input type="text" placeholder="Address" value={address}
-                        onChange={event => setAddress(event.target.value)} /><br />
-                    <input type="text" placeholder="House number" value={houseNumber}
-                        onChange={event => setHouseNumber(event.target.value)} /><br />
-                    <input type="text" placeholder="Area code" value={areaCode}
-                        onChange={event => setAreaCode(event.target.value)} /><br />
-                    <input type="text" placeholder="Area" value={area}
-                        onChange={event => setArea(event.target.value)} /><br />
-                    <input type="text" placeholder="Mail" value={newEmail}
-                        onChange={event => setNewEmail(event.target.value)} /><br />
+                    <input type="text" placeholder="First name" value={ firstName }
+                        onChange={ event => setFirstName(event.target.value)} /><br />
+                    <input type="text" placeholder="Second name" value={ secondName }
+                        onChange={ event => setSecondName(event.target.value) } /><br />
+                    <input type="text" placeholder="Birth date (YYYY-MM-DD)" value={ birthDate }
+                        onChange={ event => setBirthDate(event.target.value) } /><br />
+                    <input type="text" placeholder="Address" value={ address }
+                        onChange={ event => setAddress(event.target.value) } /><br />
+                    <input type="text" placeholder="House number" value={ houseNumber }
+                        onChange={ event => setHouseNumber(event.target.value) } /><br />
+                    <input type="text" placeholder="Area code" value={ areaCode }
+                        onChange={ event => setAreaCode(event.target.value) } /><br />
+                    <input type="text" placeholder="Area" value={ area }
+                        onChange={ event => setArea(event.target.value) } /><br />
+                    <input type="text" placeholder="Mail" value={ newEmail }
+                        onChange={ event => setNewEmail(event.target.value) } /><br />
 
                     <p>Optional fields</p>
-                    <input type="text" placeholder="Salutation" value={salutation}
-                        onChange={event => setSalution(event.target.value)} /><br />
-                    <input type="text" placeholder="Company" value={company}
-                        onChange={event => setCompany(event.target.value)} /><br /><br />
+                    <input type="text" placeholder="Salutation" value={ salutation }
+                        onChange={ event => setSalution(event.target.value) } /><br />
+                    <input type="text" placeholder="Company" value={ company }
+                        onChange={ event => setCompany(event.target.value) } /><br /><br />
 
                     <button onClick={handleGetCurrentValues}>Show current data</button>
                     <button
@@ -105,9 +105,10 @@ export function EditPersonDataAsUserPage(props: Props) {
                             houseNumber === "" || areaCode === "" || area === "" || newEmail === "" }
                         onClick={ () => handleDataEdit(props) }>Submit</button>
                     <button onClick={ props.onBack }>Back</button>
-                </> : null}
+                </> : null 
+            }
 
-            {errorOccurred ? showErrorOccurredWarning() : null}
+            { errorOccurred ? showErrorOccurredWarning() : null }
         </>
     )
 }

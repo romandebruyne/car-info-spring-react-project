@@ -7,7 +7,6 @@ import './Datagrid.css'
 export type Props = { creds: Credentials; onBack: () => void };
 
 export function CarInfoPage(props: Props) {
-    const [cars, setCars] = useState<null | Car[]>(null)
     const [fullText, setFullText] = useState("");
     const [id, setId] = useState("");
     const [model, setModel] = useState("");
@@ -29,6 +28,7 @@ export function CarInfoPage(props: Props) {
     const [sisterModelTwo, setSisterModelTwo] = useState("");
     const [modelType, setModelType] = useState("");
     const [baseCar, setBaseCar] = useState("");
+    const [cars, setCars] = useState<null | Car[]>(null)
     const [allFiltersAreOpen, setAllFiltersAreOpen] = useState(false);
 
     const tableColumns: GridColDef[] = [
@@ -54,14 +54,14 @@ export function CarInfoPage(props: Props) {
         { field: 'baseCar', headerName: 'Base Car', width: 50 }
     ];
 
-    function handleFilter() {
+    function handleClickOnShowResults() {
         getCarInfoByFullTextSearch(props.creds, fullText, id, model, brand, indicator, modelFamily, launchDate, modelYear,
             developmentType, modelStatus, segment, carBodyType, carBodySpecification, engineType, carProject, limitation, uuid,
             sisterModelOne, sisterModelTwo, modelType, baseCar)
             .then(body => setCars(body.data));
     }
 
-    function handleOpenCloseFilters() {
+    function handleVisibilityOfFilters() {
         setAllFiltersAreOpen(!allFiltersAreOpen);
         handleReset();
     }
@@ -93,76 +93,77 @@ export function CarInfoPage(props: Props) {
     return (
         <>
             <div className="box">
-                <input type="text" placeholder="Full text" value={fullText}
-                    onChange={event => setFullText(event.target.value)} />
+                <input type="text" placeholder="Full text" value={ fullText }
+                    onChange={ event => setFullText(event.target.value) } />
 
-                <button onClick={handleOpenCloseFilters}>Show all filters</button>
-                <button onClick={handleReset}>Reset all filters</button>
-                <button onClick={handleFilter}>Show results</button>
-                <button onClick={props.onBack}>Back</button><br /><br />
+                <button onClick={ handleVisibilityOfFilters }>Show all filters</button>
+                <button onClick={ handleReset }>Reset all filters</button>
+                <button onClick={ handleClickOnShowResults }>Show results</button>
+                <button onClick={ props.onBack }>Back</button><br /><br />
             </div>
 
-            {allFiltersAreOpen ?
+            { allFiltersAreOpen ?
                 <>
                     <div className="box">
-                        <input type="text" placeholder="ID" value={id}
-                            onChange={event => setId(event.target.value)} />
-                        <input type="text" placeholder="Model" value={model}
-                            onChange={event => setModel(event.target.value)} />
-                        <input type="text" placeholder="Brand" value={brand}
-                            onChange={event => setBrand(event.target.value)} />
-                        <input type="text" placeholder="Indicator" value={indicator}
-                            onChange={event => setIndicator(event.target.value)} />
-                        <input type="text" placeholder="Model family" value={modelFamily}
-                            onChange={event => setModelFamily(event.target.value)} />
+                        <input type="text" placeholder="ID" value={ id }
+                            onChange={ event => setId(event.target.value) } />
+                        <input type="text" placeholder="Model" value={ model }
+                            onChange={ event => setModel(event.target.value) } />
+                        <input type="text" placeholder="Brand" value={ brand }
+                            onChange={ event => setBrand(event.target.value) } />
+                        <input type="text" placeholder="Indicator" value={ indicator }
+                            onChange={ event => setIndicator(event.target.value) } />
+                        <input type="text" placeholder="Model family" value={ modelFamily }
+                            onChange={ event => setModelFamily(event.target.value) } />
                     </div>
                     <div className="box">
-                        <input type="text" placeholder="Launch date" value={launchDate}
-                            onChange={event => setLaunchDate(event.target.value)} />
-                        <input type="text" placeholder="Model year" value={modelYear}
-                            onChange={event => setModelYear(event.target.value)} />
-                        <input type="text" placeholder="Dev. Type" value={developmentType}
-                            onChange={event => setDevelopmentType(event.target.value)} />
-                        <input type="text" placeholder="Model status" value={modelStatus}
-                            onChange={event => setModelStatus(event.target.value)} />
-                        <input type="text" placeholder="Segment" value={segment}
-                            onChange={event => setSegment(event.target.value)} />
+                        <input type="text" placeholder="Launch date" value={ launchDate }
+                            onChange={ event => setLaunchDate(event.target.value) } />
+                        <input type="text" placeholder="Model year" value={ modelYear }
+                            onChange={ event => setModelYear(event.target.value) } />
+                        <input type="text" placeholder="Dev. Type" value={ developmentType }
+                            onChange={ event => setDevelopmentType(event.target.value) } />
+                        <input type="text" placeholder="Model status" value={ modelStatus }
+                            onChange={ event => setModelStatus(event.target.value) } />
+                        <input type="text" placeholder="Segment" value={ segment }
+                            onChange={ event => setSegment(event.target.value) } />
                     </div>
                     <div className="box">
-                        <input type="text" placeholder="Car Body Type" value={carBodyType}
-                            onChange={event => setCarBodyType(event.target.value)} />
-                        <input type="text" placeholder="Car Body Spec." value={carBodySpecification}
-                            onChange={event => setCarBodySpecification(event.target.value)} />
-                        <input type="text" placeholder="Engine Type" value={engineType}
-                            onChange={event => setEngineType(event.target.value)} />
-                        <input type="text" placeholder="Car Project" value={carProject}
-                            onChange={event => setCarProject(event.target.value)} />
-                        <input type="text" placeholder="Limitation" value={limitation}
-                            onChange={event => setLimitation(event.target.value)} />
+                        <input type="text" placeholder="Car Body Type" value={ carBodyType }
+                            onChange={ event => setCarBodyType(event.target.value) } />
+                        <input type="text" placeholder="Car Body Spec." value={ carBodySpecification }
+                            onChange={ event => setCarBodySpecification(event.target.value) } />
+                        <input type="text" placeholder="Engine Type" value={ engineType }
+                            onChange={ event => setEngineType(event.target.value) } />
+                        <input type="text" placeholder="Car Project" value={ carProject }
+                            onChange={ event => setCarProject(event.target.value) } />
+                        <input type="text" placeholder="Limitation" value={ limitation }
+                            onChange={ event => setLimitation(event.target.value) } />
                     </div>
                     <div className="box">
-                        <input type="text" placeholder="UUID" value={uuid}
-                            onChange={event => setUuid(event.target.value)} />
-                        <input type="text" placeholder="Sister Model 1" value={sisterModelOne}
-                            onChange={event => setSisterModelOne(event.target.value)} />
-                        <input type="text" placeholder="Sister Model 2" value={sisterModelTwo}
-                            onChange={event => setSisterModelTwo(event.target.value)} />
-                        <input type="text" placeholder="Model Type" value={modelType}
-                            onChange={event => setModelType(event.target.value)} />
-                        <input type="text" placeholder="Base Car" value={baseCar}
-                            onChange={event => setBaseCar(event.target.value)} />
+                        <input type="text" placeholder="UUID" value={ uuid }
+                            onChange={ event => setUuid(event.target.value) } />
+                        <input type="text" placeholder="Sister Model 1" value={ sisterModelOne }
+                            onChange={ event => setSisterModelOne(event.target.value)} />
+                        <input type="text" placeholder="Sister Model 2" value={ sisterModelTwo }
+                            onChange={ event => setSisterModelTwo(event.target.value) } />
+                        <input type="text" placeholder="Model Type" value={ modelType }
+                            onChange={ event => setModelType(event.target.value) } />
+                        <input type="text" placeholder="Base Car" value={ baseCar }
+                            onChange={ event => setBaseCar(event.target.value) } />
                     </div>
                 </>
-                : null}
+                : null
+            }
 
             <div>
-                {cars !== null ?
+                { cars !== null ?
                     <div className="whitetable">
                         <DataGrid
                             rows={ cars }
                             columns={ tableColumns }
-                            initialState={{ pagination: { paginationModel: { page: 0, pageSize: 50 }, }, }}
-                            pageSizeOptions={[50]} />
+                            initialState={ { pagination: { paginationModel: { page: 0, pageSize: 50 }, }, } }
+                            pageSizeOptions={ [50] } />
                     </div> : null
                 }
             </div>

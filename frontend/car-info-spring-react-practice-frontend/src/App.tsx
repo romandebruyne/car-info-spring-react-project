@@ -12,7 +12,7 @@ function App() {
   const [loginPageIsOpen, setLoginPageIsOpen] = useState(false);
   const [credentials, setCredentials] = useState<null | Credentials>(null)
   const [wrongCredentialsWarningIsOpen, setWrongCredentialsWarningIsOpen] = useState(false);
-  const [deactivatedWarningIsOpen, setDeactivatedWarningIsOpen] = useState(false);
+  const [accountIsDeactivatedWarningIsOpen, setAccountIsDeactivatedWarningIsOpen] = useState(false);
   const [userPageIsOpen, setUserPageIsOpen] = useState(false);
   const [adminPageIsOpen, setAdminPageIsOpen] = useState(false);
 
@@ -27,7 +27,7 @@ function App() {
       setWrongCredentialsWarningIsOpen(true);
     } else if (role == "DEACTIVATED") {
       setLoginPageIsOpen(false);
-      setDeactivatedWarningIsOpen(true);
+      setAccountIsDeactivatedWarningIsOpen(true);
     } else if (role === "ADMIN") {
       setCredentials(creds);
       setLoginPageIsOpen(false);
@@ -39,20 +39,20 @@ function App() {
     }
   }
 
-  function handleUnauthorizedLogin() {
+  function showUnauthorizedLoginWarning() {
     return (
       <div>
         <p>Wrong username and/ or password!</p>
-        <button onClick={backFromFailedLogin}>Back to login</button>
+        <button onClick={ backFromFailedLogin }>Back to login</button>
       </div>
     )
   }
 
-  function handleDeactivatedUserLogin() {
+  function showAccountIsDeactivatedWarning() {
     return (
       <div>
         <p>Account is deactivated, please contact the administrator!</p>
-        <button onClick={backFromUnauthorizedLogin}>Back to login</button>
+        <button onClick={ backFromUnauthorizedLogin }>Back to login</button>
       </div>
     )
   }
@@ -64,7 +64,7 @@ function App() {
 
   function backFromUnauthorizedLogin() {
     setLoginPageIsOpen(true);
-    setDeactivatedWarningIsOpen(false);
+    setAccountIsDeactivatedWarningIsOpen(false);
   }
 
   function backFromLogin() {
@@ -89,12 +89,12 @@ function App() {
 
       { /* Login Page */}
       { loginPageIsOpen ? <LoginPage onSubmit={ handleLogin } onBack={ backFromLogin } /> : null }
-      { wrongCredentialsWarningIsOpen ? handleUnauthorizedLogin() : null }
-      { deactivatedWarningIsOpen ? handleDeactivatedUserLogin() : null }
+      { wrongCredentialsWarningIsOpen ? showUnauthorizedLoginWarning() : null }
+      { accountIsDeactivatedWarningIsOpen ? showAccountIsDeactivatedWarning() : null }
 
       { /* User or Admin Page */}
       { userPageIsOpen && credentials !== null ? <UserPage creds={ credentials } onBack={ backFromUserPage } /> : null }
-      { adminPageIsOpen && credentials !== null ? <AdminPage creds={credentials} onBack={ backFromAdminPage } /> : null }
+      { adminPageIsOpen && credentials !== null ? <AdminPage creds={ credentials } onBack={ backFromAdminPage } /> : null }
     </>
   )
 }

@@ -9,14 +9,14 @@ export function FeatureSelectionPage(props: Props) {
     return (
         <div>
             <h2>Feature Selection</h2>
-            <p>Click on feature and submit with button.</p>
+            <p>Click on feature and submit decision via click on button.</p>
             <ul>
                 { allFeatures.map((feature) => (
                     <li onClick={ () => setFeature(feature) }>{ feature }</li>
                 ))}
             </ul>
             
-            <button onClick={ () => props.onSelect(feature) }>Select feature: {feature}</button>
+            <button onClick={ () => props.onSelect(feature) }>Select feature: { feature }</button>
         </div>
     )
 }

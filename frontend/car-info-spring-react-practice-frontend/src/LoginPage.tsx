@@ -23,17 +23,17 @@ export function LoginPage(props: Props) {
         <>
             <div>
                 <h2>Login</h2>
-                <input type="text" placeholder="Mail" value={email} onChange={(event) =>
-                    setEmail(event.target.value)} /><br />
-                <input type="password" placeholder="Password" value={password} onChange={(event) =>
-                    setPassword(event.target.value)} /><br /><br />
+                <input type="text" placeholder="Mail" value={ email }
+                    onChange={ (event) => setEmail(event.target.value) } /><br />
+                <input type="password" placeholder="Password" value={ password }
+                    onChange={ (event) => setPassword(event.target.value) } /><br /><br />
 
                 <button
-                    disabled={email === "" || password === ""}
-                    onClick={() => handleLogin(props)}
-                > Login
+                    disabled={ email === "" || password === "" }
+                    onClick={ () => handleLogin(props) }
+                >Login
                 </button>
-                <button onClick={props.onBack}>Back</button>
+                <button onClick={ props.onBack }>Back</button>
             </div>
         </>
     )

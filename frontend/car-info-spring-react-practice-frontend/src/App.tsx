@@ -15,6 +15,7 @@ function App() {
   const [credentials, setCredentials] = useState<null | Credentials>(null)
   const [wrongCredentialsWarningIsOpen, setWrongCredentialsWarningIsOpen] = useState(false);
   const [accountIsDeactivatedWarningIsOpen, setAccountIsDeactivatedWarningIsOpen] = useState(false);
+  const [registrationWasSuccessfulInformationIsOpen, setRegistrationWasSuccessfulInformationIsOpen] = useState(false);
   const [userPageIsOpen, setUserPageIsOpen] = useState(false);
   const [adminPageIsOpen, setAdminPageIsOpen] = useState(false);
 
@@ -48,12 +49,13 @@ function App() {
   }
 
   function handleRegistration() {
-    showSuccessfulRegistrationInformation;
+    setRegistrationWasSuccessfulInformationIsOpen(true);
     setRegistrationPageIsOpen(false);
   }
 
   function handleClickOnContinueToUserPage() {
-    setUserPageIsOpen(true);
+    setRegistrationWasSuccessfulInformationIsOpen(false);
+    setStartPageIsOpen(true);
   }
 
   function showUnauthorizedLoginWarning() {
@@ -78,6 +80,7 @@ function App() {
     return (
       <div>
         <p>Registration was successful!</p>
+        <p>Please login with your credentials.</p>
         <button onClick={ handleClickOnContinueToUserPage }>Continue</button>
       </div>
     )
@@ -113,7 +116,7 @@ function App() {
     setLoginPageIsOpen(true);
   }
 
-  return(
+  return (
     <>
       { /* Start Page */ }
       { startPageIsOpen ? <StartPage onLogin={ handleClickOnLogin } onRegister={ handleClickOnRegister } /> : null }
@@ -124,8 +127,9 @@ function App() {
       { accountIsDeactivatedWarningIsOpen ? showAccountIsDeactivatedWarning() : null }
 
       { /* Registration Page */ }
-      { registrationPageIsOpen && credentials !== null? <CreatePersonPage creds={ credentials }
-        onCreation={ handleRegistration } onBack={ backFromRegistration } /> : null } 
+      { registrationPageIsOpen && credentials !== null ? <CreatePersonPage creds={ credentials }
+        onCreation={ handleRegistration } onBack={ backFromRegistration } /> : null }
+      { registrationWasSuccessfulInformationIsOpen ? showSuccessfulRegistrationInformation() : null }
 
       { /* User or Admin Page */ }
       { userPageIsOpen && credentials !== null ? <UserPage creds={ credentials } onBack={ backFromUserPage } /> : null }
